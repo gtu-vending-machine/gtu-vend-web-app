@@ -8,15 +8,6 @@ import { Link } from '@nextui-org/link';
 import clsx from 'clsx';
 import { Logo } from '@/components/icons';
 
-const Copyright = (props: any) => {
-  return (
-    <>
-      <p>GTU Vending Machine</p>
-      <p>© {new Date().getFullYear()}</p>
-    </>
-  );
-};
-
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
