@@ -13,12 +13,7 @@ export const siteConfig = {
       href: '/about',
     },
   ],
-  dropdownMenuItems: [
-    {
-      label: 'Logout',
-      href: '/logout',
-    },
-  ],
+
   links: {
     github: 'https://github.com/gtu-vending-machine',
   },

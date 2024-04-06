@@ -6,7 +6,7 @@ import {
   NavbarBrand,
   NavbarItem,
 } from '@nextui-org/navbar';
-import { Link } from '@nextui-org/link';
+// import { Link } from '@nextui-org/link';
 
 import { link as linkStyles } from '@nextui-org/theme';
 
@@ -24,9 +24,14 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Link,
 } from '@nextui-org/react';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/authProvider';
 
 export const Navbar = () => {
+  const { user, logout } = useContext(AuthContext);
+
   return (
     <NextUINavbar maxWidth='xl' position='sticky'>
       <NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
@@ -65,12 +70,12 @@ export const Navbar = () => {
                 as='button'
                 className='transition-transform'
                 color='secondary'
-                name='Jason Hughes'
+                name={user?.username}
                 size='sm'
               />
             </DropdownTrigger>
             <DropdownMenu aria-label='Profile Actions' variant='flat'>
-              {siteConfig.dropdownMenuItems.map((item, index) => (
+              {/* {siteConfig.dropdownMenuItems.map((item, index) => (
                 <DropdownItem key={`${item}-${index}`}>
                   <Link
                     color={
@@ -86,7 +91,16 @@ export const Navbar = () => {
                     {item.label}
                   </Link>
                 </DropdownItem>
-              ))}
+              ))} */}
+              <DropdownItem
+                onClick={logout}
+                key='logout'
+                color='danger'
+                className='text-danger'
+                aria-label='Logout'
+              >
+                Logout
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </NavbarItem>
