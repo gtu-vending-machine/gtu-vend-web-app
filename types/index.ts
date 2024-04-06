@@ -4,6 +4,8 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
+export type Role = 'admin' | 'user' | 'vendingMachine';
+
 export type Dispenser = {
   id: number;
   index: number;
@@ -18,7 +20,7 @@ export type User = {
   password?: string;
   name?: string;
   token?: string;
-  role: string;
+  role: Role;
 };
 
 export type UserCredentials = Pick<User, 'username' | 'password' | 'name'>;
