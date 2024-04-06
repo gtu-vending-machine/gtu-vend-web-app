@@ -6,7 +6,6 @@ import {
   NavbarBrand,
   NavbarItem,
 } from '@nextui-org/navbar';
-// import { Link } from '@nextui-org/link';
 
 import { link as linkStyles } from '@nextui-org/theme';
 
@@ -59,11 +58,13 @@ export const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className='flex basis-full justify-end' justify='end'>
-        <NavbarItem className='flex gap-2'>
-          <Link isExternal href={siteConfig.links.github} aria-label='Github'>
-            <GithubIcon className='text-default-500' />
-          </Link>
-          <ThemeSwitch />
+        <NavbarItem className='flex gap-4'>
+          <div className='flex gap-2 items-center'>
+            <Link isExternal href={siteConfig.links.github} aria-label='Github'>
+              <GithubIcon className='text-default-500' />
+            </Link>
+            <ThemeSwitch />
+          </div>
           <Dropdown placement='bottom-end'>
             <DropdownTrigger>
               <Avatar
@@ -75,23 +76,6 @@ export const Navbar = () => {
               />
             </DropdownTrigger>
             <DropdownMenu aria-label='Profile Actions' variant='flat'>
-              {/* {siteConfig.dropdownMenuItems.map((item, index) => (
-                <DropdownItem key={`${item}-${index}`}>
-                  <Link
-                    color={
-                      index === 2
-                        ? 'primary'
-                        : index === siteConfig.dropdownMenuItems.length - 1
-                        ? 'danger'
-                        : 'foreground'
-                    }
-                    href={item.href}
-                    size='sm'
-                  >
-                    {item.label}
-                  </Link>
-                </DropdownItem>
-              ))} */}
               <DropdownItem
                 onClick={logout}
                 key='logout'

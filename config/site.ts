@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'GTU Vending Machine',
+  name: 'GTUVend',
   description: 'A vending machine for GTU students',
   navItems: [
     {
