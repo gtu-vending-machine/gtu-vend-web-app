@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Table,
   TableHeader,
@@ -20,138 +20,52 @@ import {
   Selection,
   ChipProps,
   SortDescriptor,
+  Spinner,
 } from '@nextui-org/react';
 import { capitalize } from '@/utils/utils';
 import { SearchIcon } from '@/components/icons/table/search-icon';
 import { ChevronDownIcon } from '@/components/icons/table/chevron-down-icon';
-import { PlusIcon } from '@/components/icons/table/plus-icon';
+import { Column, Query, Role, UserListItem } from '@/types';
+// import { PlusIcon } from '@/components/icons/table/plus-icon';
 
-const statusColorMap: Record<string, ChipProps['color']> = {
-  active: 'success',
-  paused: 'danger',
-  vacation: 'warning',
+const roleColorMap: Record<string, ChipProps['color']> = {
+  admin: 'danger',
+  user: 'warning',
 };
 
-const INITIAL_VISIBLE_COLUMNS = ['name', 'role', 'status', 'actions'];
-
-const columns = [
-  { name: 'ID', uid: 'id', sortable: true },
-  { name: 'NAME', uid: 'name', sortable: true },
-  { name: 'STATUS', uid: 'status', sortable: true },
-  { name: 'ACTIONS', uid: 'actions' },
+const roleOptions = [
+  { uid: 'admin', name: 'admin' },
+  { uid: 'user', name: 'user' },
 ];
 
-const statusOptions = [
-  { name: 'Active', uid: 'active' },
-  { name: 'Paused', uid: 'paused' },
-  { name: 'Vacation', uid: 'vacation' },
-];
+export default function Users({
+  users,
+  loading,
+  count,
+  columns,
+  query,
+  setQuery,
+}: {
+  users: UserListItem[];
+  loading: boolean;
+  count: number;
+  columns: Column[];
+  query: Query<UserListItem>;
+  setQuery: React.Dispatch<React.SetStateAction<Query<UserListItem>>>;
+}) {
+  const [page, setPage] = useState(1);
+  const [filterValue, setFilterValue] = useState('');
 
-const users = [
-  {
-    id: 1,
-    name: 'Tony Reichert',
-    role: 'CEO',
-    team: 'Management',
-    status: 'active',
-    age: '29',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-    email: 'tony.reichert@example.com',
-  },
-  {
-    id: 2,
-    name: 'Zoey Lang',
-    role: 'Tech Lead',
-    team: 'Development',
-    status: 'paused',
-    age: '25',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    email: 'zoey.lang@example.com',
-  },
-  {
-    id: 3,
-    name: 'Jane Fisher',
-    role: 'Sr. Dev',
-    team: 'Development',
-    status: 'active',
-    age: '22',
-    avatar: 'https://i.pravatar.cc/150?u=a04258114e29026702d',
-    email: 'jane.fisher@example.com',
-  },
-  {
-    id: 4,
-    name: 'William Howard',
-    role: 'C.M.',
-    team: 'Marketing',
-    status: 'vacation',
-    age: '28',
-    avatar: 'https://i.pravatar.cc/150?u=a048581f4e29026701d',
-    email: 'william.howard@example.com',
-  },
-  {
-    id: 5,
-    name: 'Kristen Copper',
-    role: 'S. Manager',
-    team: 'Sales',
-    status: 'active',
-    age: '24',
-    avatar: 'https://i.pravatar.cc/150?u=a092581d4ef9026700d',
-    email: 'kristen.cooper@example.com',
-  },
-  {
-    id: 6,
-    name: 'Brian Kim',
-    role: 'P. Manager',
-    team: 'Management',
-    age: '29',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
-    email: 'brian.kim@example.com',
-    status: 'Active',
-  },
-  {
-    id: 7,
-    name: 'Michael Hunt',
-    role: 'Designer',
-    team: 'Design',
-    status: 'paused',
-    age: '27',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e29027007d',
-    email: 'michael.hunt@example.com',
-  },
-  {
-    id: 8,
-    name: 'Samantha Brooks',
-    role: 'HR Manager',
-    team: 'HR',
-    status: 'active',
-    age: '31',
-    avatar: 'https://i.pravatar.cc/150?u=a042581f4e27027008d',
-    email: 'samantha.brooks@example.com',
-  },
-];
-
-type User = (typeof users)[0];
-
-export default function Users() {
-  const [filterValue, setFilterValue] = React.useState('');
-  const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
-    new Set([]),
+  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
+  const [visibleColumns, setVisibleColumns] = useState<Selection>(
+    new Set(columns.map((column) => column.uid)),
   );
-  const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS),
-  );
-  const [statusFilter, setStatusFilter] = React.useState<Selection>('all');
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: 'age',
-    direction: 'ascending',
-  });
 
-  const [page, setPage] = React.useState(1);
+  const [roleFilter, setRoleFilter] = useState<Selection>('all');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({});
 
-  const hasSearchFilter = Boolean(filterValue);
-
-  const headerColumns = React.useMemo(() => {
+  const headerColumns = useMemo(() => {
     if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
@@ -159,101 +73,37 @@ export default function Users() {
     );
   }, [visibleColumns]);
 
-  const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
-
-    if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase()),
-      );
-    }
-    if (
-      statusFilter !== 'all' &&
-      Array.from(statusFilter).length !== statusOptions.length
-    ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
-      );
-    }
-
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
-
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
-
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
-
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
-
-  const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === 'descending' ? -cmp : cmp;
-    });
-  }, [sortDescriptor, items]);
-
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
-
-    switch (columnKey) {
-      case 'name':
-        return (
-          <User
-            avatarProps={{ radius: 'lg', src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case 'role':
-        return (
-          <div className='flex flex-col'>
-            <p className='text-bold text-small capitalize'>{cellValue}</p>
-            <p className='text-bold text-tiny capitalize text-default-400'>
-              {user.team}
-            </p>
-          </div>
-        );
-      case 'status':
-        return (
-          <Chip
-            className='capitalize'
-            color={statusColorMap[user.status]}
-            size='sm'
-            variant='flat'
-          >
-            {cellValue}
-          </Chip>
-        );
-      case 'actions':
-        return (
-          <div className='relative flex justify-start items-center gap-2'>
-            <Button size='sm' variant='light'>
-              View
-            </Button>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+  const pages = Math.max(1, Math.ceil(count / rowsPerPage));
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
       setPage(page + 1);
+      setQuery((prev) => ({
+        ...prev,
+        query: {
+          ...prev.query,
+          pagination: {
+            page: page + 1,
+            pageSize: rowsPerPage,
+          },
+        },
+      }));
     }
   }, [page, pages]);
 
   const onPreviousPage = React.useCallback(() => {
     if (page > 1) {
       setPage(page - 1);
+      setQuery((prev) => ({
+        ...prev,
+        query: {
+          ...prev.query,
+          pagination: {
+            page: page - 1,
+            pageSize: rowsPerPage,
+          },
+        },
+      }));
     }
   }, [page]);
 
@@ -261,25 +111,226 @@ export default function Users() {
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
+      setQuery((prev) => ({
+        ...prev,
+        query: {
+          ...prev.query,
+          pagination: {
+            page: 1,
+            pageSize: Number(e.target.value),
+          },
+        },
+      }));
     },
     [],
   );
 
-  const onSearchChange = React.useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue('');
-    }
+  const onPageChange = React.useCallback((page: number) => {
+    setPage(page);
+    setQuery((prev) => ({
+      ...prev,
+      query: {
+        ...prev.query,
+        pagination: {
+          page,
+          pageSize: rowsPerPage,
+        },
+      },
+    }));
   }, []);
+
+  const onSearchChange = React.useCallback(
+    (value?: string) => {
+      // update states
+      setFilterValue(value || '');
+      setPage(1);
+
+      // get all filters except name
+      const otherFilters =
+        query.query?.filter?.filter((filter) => filter.field !== 'name') || [];
+
+      // add name filter if value is exists
+      const filters: typeof otherFilters = value
+        ? [
+            ...otherFilters,
+            {
+              field: 'name',
+              option: 'contains',
+              value,
+            },
+          ]
+        : otherFilters;
+
+      // update query
+      setQuery((prev) => ({
+        ...prev,
+        query: {
+          ...prev.query,
+          filter: filters,
+          pagination: {
+            page: 1,
+            pageSize: rowsPerPage,
+          },
+        },
+      }));
+    },
+    [query.query?.filter, rowsPerPage, setQuery],
+  );
 
   const onClear = React.useCallback(() => {
     setFilterValue('');
-    setPage(1);
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const onRoleSelectionChange = React.useCallback(
+    (selection: Selection) => {
+      setRoleFilter(selection);
+      setPage(1);
+      // get selected roles
+      const selectedRoles = Array.from(selection) as Role[];
+
+      // get all filters except role
+      const otherFilters =
+        query.query?.filter?.filter((filter) => filter.field !== 'role') || [];
+
+      // if all roles are selected, remove role filter
+      const filters: typeof otherFilters =
+        selectedRoles.length === roleOptions.length
+          ? otherFilters
+          : [
+              ...otherFilters,
+              {
+                field: 'role',
+                option: 'eq',
+                value: selectedRoles[0],
+              },
+            ];
+
+      // update query
+      setQuery((prev) => ({
+        ...prev,
+        query: {
+          ...prev.query,
+          filter: filters,
+          pagination: {
+            page: 1,
+            pageSize: rowsPerPage,
+          },
+        },
+      }));
+    },
+    [rowsPerPage, query],
+  );
+
+  const topContent = useTopContent({
+    filterValue,
+    onSearchChange,
+    roleFilter,
+    onRoleSelectionChange,
+    visibleColumns,
+    columns,
+    users,
+    onRowsPerPageChange,
+    onClear,
+    setVisibleColumns,
+  });
+
+  const bottomContent = useBottomContent({
+    selectedKeys,
+    users,
+    page,
+    pages,
+    onPageChange,
+    onPreviousPage,
+    onNextPage,
+  });
+
+  const renderCell = useRenderCell({});
+
+  const onSortChange = React.useCallback((descriptor: SortDescriptor) => {
+    setSortDescriptor(descriptor);
+    setQuery((prev) => ({
+      ...prev,
+      query: {
+        ...prev.query,
+        sort: {
+          field: descriptor.column as keyof UserListItem,
+          order: descriptor.direction === 'ascending' ? 'asc' : 'desc',
+        },
+      },
+    }));
+  }, []);
+
+  return (
+    <Table
+      aria-label='Example table with custom cells, pagination and sorting'
+      isHeaderSticky
+      bottomContent={bottomContent}
+      bottomContentPlacement='outside'
+      classNames={{
+        wrapper: 'max-h-[556px]',
+      }}
+      selectedKeys={selectedKeys}
+      selectionMode='multiple'
+      sortDescriptor={sortDescriptor}
+      topContent={topContent}
+      topContentPlacement='outside'
+      onSelectionChange={setSelectedKeys}
+      onSortChange={onSortChange}
+      className='w-full p-4'
+    >
+      <TableHeader columns={headerColumns}>
+        {(column) => (
+          <TableColumn
+            key={column.uid}
+            align={column.uid === 'actions' ? 'center' : 'start'}
+            allowsSorting={column.sortable}
+          >
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody
+        emptyContent={'No users found'}
+        items={users}
+        loadingContent={<Spinner />}
+        loadingState={loading ? 'loading' : 'idle'}
+      >
+        {(item) => (
+          <TableRow key={item.id}>
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
+}
+
+const useTopContent = ({
+  filterValue,
+  onSearchChange,
+  roleFilter,
+  onRoleSelectionChange,
+  visibleColumns,
+  columns,
+  users,
+  onRowsPerPageChange,
+  onClear,
+  setVisibleColumns,
+}: {
+  filterValue: string;
+  onSearchChange: (value?: string) => void;
+  roleFilter: Selection;
+  onRoleSelectionChange: (selection: Selection) => void;
+  visibleColumns: Selection;
+  columns: Column[];
+  users: UserListItem[];
+  onRowsPerPageChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onClear: () => void;
+  setVisibleColumns: React.Dispatch<React.SetStateAction<Selection>>;
+}) => {
+  const topContent = useMemo(() => {
     return (
       <div className='flex flex-col gap-4 mt-4'>
         <div className='flex justify-between gap-3 items-end'>
@@ -299,20 +350,20 @@ export default function Users() {
                   endContent={<ChevronDownIcon className='text-small' />}
                   variant='flat'
                 >
-                  Status
+                  Role
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 disallowEmptySelection
                 aria-label='Table Columns'
                 closeOnSelect={false}
-                selectedKeys={statusFilter}
+                selectedKeys={roleFilter}
                 selectionMode='multiple'
-                onSelectionChange={setStatusFilter}
+                onSelectionChange={onRoleSelectionChange}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className='capitalize'>
-                    {capitalize(status.name)}
+                {roleOptions.map((role) => (
+                  <DropdownItem key={role.uid} className='capitalize'>
+                    {capitalize(role.name)}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
@@ -341,9 +392,9 @@ export default function Users() {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button color='primary' endContent={<PlusIcon />}>
+            {/* <Button color='primary' endContent={<PlusIcon />}>
               Add New
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className='flex justify-between items-center'>
@@ -366,21 +417,43 @@ export default function Users() {
     );
   }, [
     filterValue,
-    statusFilter,
-    visibleColumns,
     onSearchChange,
-    onRowsPerPageChange,
+    roleFilter,
+    onRoleSelectionChange,
+    visibleColumns,
+    columns,
     users.length,
-    hasSearchFilter,
+    onRowsPerPageChange,
+    onClear,
   ]);
 
-  const bottomContent = React.useMemo(() => {
+  return topContent;
+};
+
+const useBottomContent = ({
+  selectedKeys,
+  users,
+  page,
+  pages,
+  onPageChange,
+  onPreviousPage,
+  onNextPage,
+}: {
+  selectedKeys: Selection;
+  users: UserListItem[];
+  page: number;
+  pages: number;
+  onPageChange: (page: number) => void;
+  onPreviousPage: () => void;
+  onNextPage: () => void;
+}) => {
+  const bottomContent = useMemo(() => {
     return (
       <div className='py-2 px-2 flex justify-between items-center'>
         <span className='w-[30%] text-small text-default-400'>
           {selectedKeys === 'all'
             ? 'All items selected'
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            : `${selectedKeys.size} of ${users.length} selected`}
         </span>
         <Pagination
           isCompact
@@ -389,7 +462,7 @@ export default function Users() {
           color='primary'
           page={page}
           total={pages}
-          onChange={setPage}
+          onChange={onPageChange}
         />
         <div className='hidden sm:flex w-[30%] justify-end gap-2'>
           <Button
@@ -411,46 +484,55 @@ export default function Users() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, users.length, page, pages]);
 
-  return (
-    <Table
-      aria-label='Example table with custom cells, pagination and sorting'
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement='outside'
-      classNames={{
-        wrapper: 'max-h-[382px]',
-      }}
-      selectedKeys={selectedKeys}
-      selectionMode='multiple'
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement='outside'
-      onSelectionChange={setSelectedKeys}
-      onSortChange={setSortDescriptor}
-      className='w-full p-4'
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            align={column.uid === 'actions' ? 'center' : 'start'}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={'No users found'} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+  return bottomContent;
+};
+
+const useRenderCell = ({}: {}) => {
+  const renderCell = React.useCallback(
+    (user: UserListItem, columnKey: React.Key) => {
+      const cellValue = user[columnKey as keyof UserListItem];
+
+      switch (columnKey) {
+        case 'name':
+          return (
+            <User
+              avatarProps={{
+                radius: 'lg',
+                name: user.name,
+              }}
+              description={user.username}
+              name={cellValue}
+            >
+              {user.username}
+            </User>
+          );
+        case 'role':
+          return (
+            <Chip
+              className='capitalize'
+              color={roleColorMap[user.role]}
+              size='sm'
+              variant='flat'
+            >
+              {cellValue}
+            </Chip>
+          );
+        case 'actions':
+          return (
+            <div className='relative flex justify-start items-center gap-2'>
+              <Button size='sm' variant='light'>
+                View
+              </Button>
+            </div>
+          );
+        default:
+          return cellValue;
+      }
+    },
+    [],
   );
-}
+
+  return renderCell;
+};
