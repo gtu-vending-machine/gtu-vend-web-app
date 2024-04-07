@@ -1,7 +1,7 @@
 'use client';
 
 import { EyeFilledIcon, EyeSlashFilledIcon, Logo } from '@/components/icons';
-import { AuthContext } from '@/context/authProvider';
+import { AuthContext } from '@/context/auth-provider';
 import { Message, UserCredentials } from '@/types';
 import { Button, Card, Input, Link } from '@nextui-org/react';
 import { useContext, useState } from 'react';

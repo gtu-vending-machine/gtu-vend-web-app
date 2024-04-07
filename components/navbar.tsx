@@ -26,7 +26,7 @@ import {
   Link,
 } from '@nextui-org/react';
 import { useContext } from 'react';
-import { AuthContext } from '@/context/authProvider';
+import { AuthContext } from '@/context/auth-provider';
 
 export const Navbar = () => {
   const { user, logout } = useContext(AuthContext);

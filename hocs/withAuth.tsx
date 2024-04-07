@@ -1,6 +1,6 @@
 'use client';
 
-import { AuthContext } from '@/context/authProvider';
+import { AuthContext } from '@/context/auth-provider';
 import { Role } from '@/types';
 import { useRouter } from 'next/navigation';
 import { useContext } from 'react';

@@ -1,7 +1,7 @@
 'use client';
 import { GithubIcon } from '@/components/icons';
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '@/context/authProvider';
+import { AuthContext } from '@/context/auth-provider';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {

@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/config/fonts';
 import { Providers } from './providers';
-import { Navbar } from '@/components/navbar';
 import clsx from 'clsx';
+import { Layout } from '@/components/layouts/app-layout';
 
 export const metadata: Metadata = {
   title: {
@@ -39,10 +39,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <div className='relative flex flex-col h-screen'>
-            <Navbar />
-            <main className='container mx-auto max-w-7xl px-6 flex-grow'>
-              {children}
-            </main>
+            <Layout>{children}</Layout>
             <footer className='w-full flex items-center justify-center py-3'>
               <p className='text-sm text-center text-gray-500'>
                 GTUVend © {new Date().getFullYear()}

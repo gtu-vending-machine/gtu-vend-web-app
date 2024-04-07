@@ -13,7 +13,6 @@ export const siteConfig = {
       href: '/about',
     },
   ],
-
   links: {
     github: 'https://github.com/gtu-vending-machine',
   },
