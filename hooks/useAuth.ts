@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { AuthAction, Message, User, UserResponse } from '@/types';
@@ -15,6 +15,7 @@ export const useAuth = (): [
   const baseURL = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
   const pathname = usePathname();
+  const authFetched = useRef(false);
 
   const axiosInstance = axios.create({
     baseURL,
@@ -32,31 +33,36 @@ export const useAuth = (): [
     return config;
   });
 
-  // get auth status on page load by get method and /auth route
-  useEffect(() => {
-    const getAuthStatus = async () => {
-      try {
-        // I don't know why but this executes twice
-        await axiosInstance.get('/auth');
+  // expires date will be saved in local storage, if it is not expired, no need to '/auth' route
+  const getAuthStatus = async () => {
+    try {
+      // I don't know why but this executes twice
+      await axiosInstance.get('/auth');
 
-        // if not error, get user from local storage
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-          if (pathname === '/login' || pathname === '/sign-up') {
-            router.push('/');
-          }
-        }
-      } catch (error: AxiosError | any) {
-        console.error((error as AxiosError)?.response?.data);
-        localStorage.removeItem('user');
-        setUser(null);
-        if (pathname !== '/login' && pathname !== '/sign-up') {
-          router.push('/login');
+      // if not error, get user from local storage
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+        if (pathname === '/login' || pathname === '/sign-up') {
+          router.push('/');
         }
       }
-    };
-    getAuthStatus();
+    } catch (error: AxiosError | any) {
+      console.error((error as AxiosError)?.response?.data);
+      localStorage.removeItem('user');
+      setUser(null);
+      if (pathname !== '/login' && pathname !== '/sign-up') {
+        router.push('/login');
+      }
+    }
+  };
+
+  // get auth status on page load by get method and /auth route
+  useEffect(() => {
+    if (!authFetched.current) {
+      getAuthStatus();
+      authFetched.current = true;
+    }
     // don't update on axiosInstance. no need to update on path change also;
     // since we alreaady have push (prevent one more render) - CAN delete pathname later
   }, [pathname]);
