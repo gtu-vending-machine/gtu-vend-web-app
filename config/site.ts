@@ -17,3 +17,10 @@ export const siteConfig = {
     github: 'https://github.com/gtu-vending-machine',
   },
 };
+
+export type Route =
+  | '/'
+  | '/about'
+  | '/admin'
+  | '/admin/users'
+  | '/admin/products';

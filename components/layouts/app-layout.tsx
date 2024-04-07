@@ -3,10 +3,9 @@
 import { usePathname } from 'next/navigation';
 import { useContext } from 'react';
 import { Navbar } from '../navbar';
-import { Route } from '@/config/routes';
 
-// paths start with followings are not allowed to layout
-const notAllowedPaths: Route[] = ['/login', '/sign-up', '/admin'];
+// paths start with followings are not allowed to application layout
+const notAllowedPaths = ['/login', '/sign-up', '/admin'];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
@@ -22,6 +21,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <main className='container mx-auto max-w-7xl px-6 flex-grow'>
         {children}
       </main>
+      <footer className='w-full flex items-center justify-center py-3 bottom-0'>
+        <p className='text-sm text-center text-gray-500'>
+          GTUVend © {new Date().getFullYear()}
+        </p>
+      </footer>
     </div>
   );
 };

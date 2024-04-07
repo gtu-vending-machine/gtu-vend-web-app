@@ -4,22 +4,24 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Navbar,
   NavbarItem,
 } from '@nextui-org/react';
-import React from 'react';
-import { DarkModeSwitch } from './darkmodeswitch';
+import React, { useContext } from 'react';
+import { AuthContext } from '@/context/auth-provider';
+import { ThemeSwitch } from '@/components/theme-switch';
 
 export const UserDropdown = () => {
+  const { user, logout } = useContext(AuthContext);
+
   return (
-    <Dropdown>
+    <Dropdown placement='bottom-end'>
       <NavbarItem>
         <DropdownTrigger>
           <Avatar
             as='button'
             color='secondary'
-            size='md'
-            src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
+            size='sm'
+            name={user?.username}
           />
         </DropdownTrigger>
       </NavbarItem>
@@ -31,15 +33,21 @@ export const UserDropdown = () => {
           key='profile'
           className='flex flex-col justify-start w-full items-start'
         >
-          <p>Signed in as</p>
-          <p>zoey@example.com</p>
+          <p className='text-sm font-light text-gray-500'>Signed in as</p>
+          <p>@{user?.username}</p>
         </DropdownItem>
 
-        <DropdownItem key='logout' color='danger' className='text-danger '>
-          Log Out
-        </DropdownItem>
         <DropdownItem key='switch'>
-          <DarkModeSwitch />
+          <ThemeSwitch />
+        </DropdownItem>
+
+        <DropdownItem
+          key='logout'
+          color='danger'
+          className='text-danger '
+          onClick={logout}
+        >
+          Log Out
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

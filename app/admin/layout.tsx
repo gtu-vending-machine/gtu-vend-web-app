@@ -1,12 +1,12 @@
 'use client';
 
 import '@/styles/globals.css';
-import { Providers } from './providers';
 import { withAuth } from '@/hocs/withAuth';
 import { Role } from '@/types';
+import { Layout as AdminLayout } from '@/components/admin/layout/layout';
 
 function Layout({ children }: { children: React.ReactNode }) {
-  return <Providers>{children}</Providers>;
+  return <AdminLayout>{children}</AdminLayout>;
 }
 
 const allowedRoles: Role[] = ['admin'];

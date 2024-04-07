@@ -11,12 +11,12 @@ interface Company {
   href: string;
 }
 
-export const CompaniesDropdown = () => {
+export const SidebarHeader = () => {
   const company: Company = {
     name: 'GTUVend',
     description: 'Admin Dashboard',
     logo: <Logo />,
-    href: '/',
+    href: '/admin',
   };
   return (
     <div className='flex items-center gap-2'>

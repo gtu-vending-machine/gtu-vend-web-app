@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Sidebar } from './sidebar.styles';
-import { CompaniesDropdown } from './companies-dropdown';
+import { SidebarHeader } from './sidebar-header';
 import { SidebarItem } from './sidebar-item';
 import { SidebarMenu } from './sidebar-menu';
 import { useSidebarContext } from '../layout/layout-context';
@@ -10,9 +10,11 @@ import { usePathname } from 'next/navigation';
 import { HomeIcon } from '@/components/icons/sidebar/home-icon';
 import { AccountsIcon } from '@/components/icons/sidebar/accounts-icon';
 import { ProductsIcon } from '@/components/icons/sidebar/products-icon';
+import { Route } from '@/config/site';
 
 export const SidebarWrapper = () => {
-  const pathname = usePathname();
+  const pathname = usePathname() as Route;
+
   const { collapsed, setCollapsed } = useSidebarContext();
 
   return (
@@ -26,28 +28,28 @@ export const SidebarWrapper = () => {
         })}
       >
         <div className={Sidebar.Header()}>
-          <CompaniesDropdown />
+          <SidebarHeader />
         </div>
         <div className='flex flex-col justify-between h-full'>
           <div className={Sidebar.Body()}>
             <SidebarItem
               title='Home'
               icon={<HomeIcon />}
-              isActive={pathname === '/'}
-              href='/'
+              isActive={pathname === '/admin'}
+              href='/admin'
             />
             <SidebarMenu title='Main Menu'>
               <SidebarItem
-                isActive={pathname === '/accounts'}
-                title='Accounts'
+                isActive={pathname === '/admin/users'}
+                title='Users'
                 icon={<AccountsIcon />}
-                href='/accounts'
+                href='/admin/users'
               />
               <SidebarItem
-                isActive={pathname === '/products'}
+                isActive={pathname === '/admin/products'}
                 title='Products'
                 icon={<ProductsIcon />}
-                href='/products'
+                href='/admin/products'
               />
             </SidebarMenu>
           </div>

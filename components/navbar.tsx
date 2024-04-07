@@ -27,10 +27,9 @@ import {
 } from '@nextui-org/react';
 import { useContext } from 'react';
 import { AuthContext } from '@/context/auth-provider';
+import { UserDropdown } from './user-dropdown';
 
 export const Navbar = () => {
-  const { user, logout } = useContext(AuthContext);
-
   return (
     <NextUINavbar maxWidth='xl' position='sticky'>
       <NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
@@ -63,31 +62,9 @@ export const Navbar = () => {
             <Link isExternal href={siteConfig.links.github} aria-label='Github'>
               <GithubIcon className='text-default-500' />
             </Link>
-            <ThemeSwitch />
           </div>
-          <Dropdown placement='bottom-end'>
-            <DropdownTrigger>
-              <Avatar
-                as='button'
-                className='transition-transform'
-                color='secondary'
-                name={user?.username}
-                size='sm'
-              />
-            </DropdownTrigger>
-            <DropdownMenu aria-label='Profile Actions' variant='flat'>
-              <DropdownItem
-                onClick={logout}
-                key='logout'
-                color='danger'
-                className='text-danger'
-                aria-label='Logout'
-              >
-                Logout
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
         </NavbarItem>
+        <UserDropdown />
       </NavbarContent>
     </NextUINavbar>
   );

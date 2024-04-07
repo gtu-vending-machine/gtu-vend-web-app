@@ -132,7 +132,7 @@ const users = [
 
 type User = (typeof users)[0];
 
-export default function Accounts() {
+export default function Users() {
   const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([]),

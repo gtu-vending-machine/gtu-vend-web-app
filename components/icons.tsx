@@ -350,8 +350,6 @@ export const VerticalDotsIcon = ({
   </svg>
 );
 
-
-
 export const ChevronDownIcon = ({
   strokeWidth = 1.5,
   ...otherProps
