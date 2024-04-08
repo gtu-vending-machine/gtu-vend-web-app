@@ -28,7 +28,9 @@ const Drawer: React.FC<Props> = ({ children, ...props }) => {
       }`}
       animated={false}
       placement='top'
-      hideCloseButton
+      onClose={() => {
+        props.onClose && props.onClose();
+      }}
       size='full'
       {...props}
     >
