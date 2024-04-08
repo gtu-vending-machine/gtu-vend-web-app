@@ -36,6 +36,13 @@ export const UserDropdown = () => {
           <p className='text-sm font-light text-gray-500'>Signed in as</p>
           <p>@{user?.username}</p>
         </DropdownItem>
+        <DropdownItem
+          key='balance'
+          className='flex flex-col justify-start w-full items-start'
+        >
+          <p className='text-sm font-light text-gray-500'>Your GTU Coins</p>
+          <p>{user?.balance} 💰</p>
+        </DropdownItem>
 
         <DropdownItem key='switch'>
           <ThemeSwitch />
