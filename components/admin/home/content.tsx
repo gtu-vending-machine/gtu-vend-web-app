@@ -4,7 +4,6 @@ import React from 'react';
 import { Link } from '@nextui-org/react';
 import NextLink from 'next/link';
 import { CardTransactions } from './card-transactions';
-import { TableWrapper } from '../table/table';
 
 export const Content = () => (
   <div className='h-full lg:px-6'>
@@ -25,7 +24,6 @@ export const Content = () => (
           View All
         </Link>
       </div>
-      <TableWrapper />
     </div>
   </div>
 );
