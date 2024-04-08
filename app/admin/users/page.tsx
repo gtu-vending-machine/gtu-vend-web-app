@@ -1,9 +1,9 @@
 'use client';
 import Users from '@/components/admin/users';
 import { AdminApiContext } from '@/context/admin-api-provider';
-import { Query, User, UserListItem } from '@/types';
+import { Query, UserListItem } from '@/types';
 import { NextPage } from 'next';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 type Column = {
   name: string;
@@ -22,32 +22,29 @@ const columns: Column[] = [
 const UsersPage: NextPage = () => {
   const { getUsersWithQuery } = useContext(AdminApiContext);
   const [users, setUsers] = useState<UserListItem[]>([]);
-  const hasFetched = useRef(false);
   const [query, setQuery] = useState<Query<UserListItem>>({ query: {} });
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchUsers = async () => {
-    const data = await getUsersWithQuery(query);
+  const fetchUsers = async (q: Query<UserListItem>) => {
+    setLoading(true);
+    const data = await getUsersWithQuery(q);
     if (data) {
       setUsers(data.users);
       setCount(data.count);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    // if (!hasFetched.current) {
-    setLoading(true);
-    fetchUsers();
-    setLoading(false);
-    hasFetched.current = true;
-    // }
+    fetchUsers(query);
   }, [query]);
 
   return (
     <>
       <Users
         users={users}
+        setUsers={setUsers}
         loading={loading}
         columns={columns}
         count={count}
