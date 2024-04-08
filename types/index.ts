@@ -64,15 +64,15 @@ export type Column = {
 };
 
 export type UserCredentials = Pick<User, 'username' | 'password' | 'name'>;
-export type UserResponse = Pick<User, 'id' | 'username' | 'role' | 'token'>;
+export type UserResponse = Pick<
+  User,
+  'id' | 'username' | 'role' | 'token' | 'balance'
+>;
 export type Message = {
   message: string;
 };
 
-export type AuthAction = (
-  newUser: UserCredentials,
-  setError: React.Dispatch<React.SetStateAction<Message>>,
-) => Promise<void>;
+export type AuthAction = (newUser: UserCredentials) => Promise<void>;
 
 export type VendingMachine = {
   id: number;
