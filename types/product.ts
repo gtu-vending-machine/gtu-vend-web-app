@@ -11,3 +11,7 @@ export type ProductQueryResponse = {
   products: ProductListItem[];
   count: number;
 };
+
+export type CreateProductPayload = Pick<Product, 'name' | 'price' | 'image'>;
+
+export type UpdateProductPayload = Partial<CreateProductPayload>;
