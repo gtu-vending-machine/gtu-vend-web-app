@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useMemo } from 'react';
 import {
   Input,
   Button,
@@ -10,38 +10,39 @@ import {
   DropdownItem,
   Selection,
 } from '@nextui-org/react';
-import { capitalize } from '@/utils/utils';
+import { capitalize, lowercase } from '@/utils/utils';
 import { SearchIcon } from '@/components/icons/table/search-icon';
 import { ChevronDownIcon } from '@/components/icons/table/chevron-down-icon';
-import { Column, UserListItem } from '@/types';
-
-const roleOptions = [
-  { uid: 'admin', name: 'admin' },
-  { uid: 'user', name: 'user' },
-];
+import { Column, OptionType } from '@/types';
 
 const useTopContent = ({
-  filterValue,
-  onSearchChange,
-  roleFilter,
-  onRoleSelectionChange,
-  visibleColumns,
+  count,
   columns,
-  users,
-  onRowsPerPageChange,
+  searchValue,
+  options,
+  optionSelection,
+  visibleColumns,
+  searchOption,
+  selectionOption,
   onClear,
+  onSearchValueChange,
+  onOptionSelectionChange,
+  onRowsPerPageChange,
   setVisibleColumns,
 }: {
-  filterValue: string;
-  onSearchChange: (value?: string) => void;
-  roleFilter: Selection;
-  onRoleSelectionChange: (selection: Selection) => void;
-  visibleColumns: Selection;
+  count: number;
   columns: Column[];
-  users: UserListItem[];
-  onRowsPerPageChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  searchValue: string;
+  options?: OptionType[];
+  optionSelection?: Selection;
+  visibleColumns: Selection;
+  searchOption: OptionType;
+  selectionOption?: OptionType;
   onClear: () => void;
-  setVisibleColumns: React.Dispatch<React.SetStateAction<Selection>>;
+  onSearchValueChange: (value?: string) => void;
+  onOptionSelectionChange?: (selection: Selection) => void;
+  onRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+  setVisibleColumns: Dispatch<SetStateAction<Selection>>;
 }) => {
   const topContent = useMemo(() => {
     return (
@@ -50,37 +51,41 @@ const useTopContent = ({
           <Input
             isClearable
             className='w-full sm:max-w-[44%]'
-            placeholder='Search by name...'
+            placeholder={`Search by ${lowercase(searchOption.name)}...`}
             startContent={<SearchIcon />}
-            value={filterValue}
+            value={searchValue}
             onClear={() => onClear()}
-            onValueChange={onSearchChange}
+            onValueChange={onSearchValueChange}
           />
           <div className='flex gap-3'>
-            <Dropdown>
-              <DropdownTrigger className='hidden sm:flex'>
-                <Button
-                  endContent={<ChevronDownIcon className='text-small' />}
-                  variant='flat'
-                >
-                  Role
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label='Table Columns'
-                closeOnSelect={false}
-                selectedKeys={roleFilter}
-                selectionMode='multiple'
-                onSelectionChange={onRoleSelectionChange}
-              >
-                {roleOptions.map((role) => (
-                  <DropdownItem key={role.uid} className='capitalize'>
-                    {capitalize(role.name)}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+            {selectionOption && (
+              <Dropdown>
+                <DropdownTrigger className='hidden sm:flex'>
+                  <Button
+                    endContent={<ChevronDownIcon className='text-small' />}
+                    variant='flat'
+                  >
+                    {capitalize(selectionOption.name)}
+                  </Button>
+                </DropdownTrigger>
+                {options && (
+                  <DropdownMenu
+                    disallowEmptySelection
+                    aria-label='Table Columns'
+                    closeOnSelect={false}
+                    selectedKeys={optionSelection}
+                    selectionMode='multiple'
+                    onSelectionChange={onOptionSelectionChange}
+                  >
+                    {options.map((options) => (
+                      <DropdownItem key={options.uid} className='capitalize'>
+                        {capitalize(options.name)}
+                      </DropdownItem>
+                    ))}
+                  </DropdownMenu>
+                )}
+              </Dropdown>
+            )}
             <Dropdown>
               <DropdownTrigger className='hidden sm:flex'>
                 <Button
@@ -112,7 +117,7 @@ const useTopContent = ({
         </div>
         <div className='flex justify-between items-center'>
           <span className='text-default-400 text-small'>
-            Total {users.length} users
+            Total {count} data
           </span>
           <label className='flex items-center text-default-400 text-small'>
             Rows per page:
@@ -129,14 +134,17 @@ const useTopContent = ({
       </div>
     );
   }, [
-    filterValue,
-    onSearchChange,
-    roleFilter,
-    onRoleSelectionChange,
+    searchOption.name,
+    searchValue,
+    onSearchValueChange,
+    selectionOption,
+    options,
+    optionSelection,
+    onOptionSelectionChange,
     visibleColumns,
     setVisibleColumns,
     columns,
-    users.length,
+    count,
     onRowsPerPageChange,
     onClear,
   ]);

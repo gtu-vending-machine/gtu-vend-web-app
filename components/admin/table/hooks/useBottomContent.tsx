@@ -2,19 +2,19 @@
 
 import React, { useMemo } from 'react';
 import { Button, Pagination, Selection } from '@nextui-org/react';
-import { UserListItem } from '@/types';
 
+// const useBottomContent = ({
 const useBottomContent = ({
+  count,
   selectedKeys,
-  users,
   page,
   pages,
   onPageChange,
   onPreviousPage,
   onNextPage,
 }: {
-  selectedKeys: Selection;
-  users: UserListItem[];
+  count: number;
+  selectedKeys?: Selection;
   page: number;
   pages: number;
   onPageChange: (page: number) => void;
@@ -24,11 +24,18 @@ const useBottomContent = ({
   const bottomContent = useMemo(() => {
     return (
       <div className='py-2 px-2 flex justify-between items-center'>
-        <span className='w-[30%] text-small text-default-400'>
-          {selectedKeys === 'all'
-            ? 'All items selected'
-            : `${selectedKeys.size} of ${users.length} selected`}
-        </span>
+        {selectedKeys ? (
+          <span className='w-[30%] text-small text-default-400'>
+            {selectedKeys === 'all'
+              ? 'All items selected'
+              : `${selectedKeys.size} of ${count} selected`}
+          </span>
+        ) : (
+          <span
+            // to center the pagination
+            className='w-[30%]'
+          ></span>
+        )}
         <Pagination
           isCompact
           showControls
@@ -58,7 +65,15 @@ const useBottomContent = ({
         </div>
       </div>
     );
-  }, [selectedKeys, users.length, page, pages]);
+  }, [
+    selectedKeys,
+    count,
+    page,
+    pages,
+    onPageChange,
+    onPreviousPage,
+    onNextPage,
+  ]);
 
   return bottomContent;
 };
