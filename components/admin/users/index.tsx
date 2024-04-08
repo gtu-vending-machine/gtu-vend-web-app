@@ -30,7 +30,7 @@ export default function UserTable({
   setData: Dispatch<SetStateAction<UserListItem[]>>;
   loading: boolean;
   count: number;
-  columns: Column[];
+  columns: Column<UserListItem>[];
   query: Query;
   setQuery: Dispatch<SetStateAction<Query>>;
 }) {
@@ -46,7 +46,6 @@ export default function UserTable({
     <>
       <TableOutline<UserListItem>
         columns={columns}
-        data={data}
         count={count}
         query={query}
         setQuery={setQuery}

@@ -6,13 +6,13 @@ import { UserListItem } from '@/types/user';
 import { NextPage } from 'next';
 import React, { useContext, useEffect, useState } from 'react';
 
-type Column = {
+type Column<T> = {
   name: string;
-  uid: keyof UserListItem | 'actions';
+  uid: keyof T | 'actions';
   sortable?: boolean;
 };
 
-const columns: Column[] = [
+const columns: Column<UserListItem>[] = [
   { name: 'ID', uid: 'id', sortable: true },
   { name: 'NAME', uid: 'name', sortable: true },
   { name: 'ROLE', uid: 'role', sortable: true },

@@ -25,7 +25,6 @@ import usePageCallbacks from './hooks/usePageCallBacks';
 
 // export default function UserTable({
 export default function TableOutline<T extends { id: number; name: string }>({
-  data,
   count,
   columns,
   query,
@@ -35,9 +34,8 @@ export default function TableOutline<T extends { id: number; name: string }>({
   selectionOption,
   children,
 }: {
-  data: T[];
   count: number;
-  columns: Column[];
+  columns: Column<T>[];
   query: Query;
   setQuery: Dispatch<SetStateAction<Query>>;
   options: OptionType[]; // option for filtering (on header)
@@ -57,14 +55,14 @@ export default function TableOutline<T extends { id: number; name: string }>({
 
   // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(columns.map((column) => column.uid)),
+    new Set(columns.map((column) => column.uid as string)),
   );
 
   const headerColumns = useMemo(() => {
     if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid as string),
     );
   }, [visibleColumns]);
 
@@ -144,7 +142,7 @@ export default function TableOutline<T extends { id: number; name: string }>({
         <TableHeader columns={headerColumns}>
           {(column) => (
             <TableColumn
-              key={column.uid}
+              key={column.uid as string}
               align={column.uid === 'actions' ? 'center' : 'start'}
               allowsSorting={column.sortable}
             >

@@ -17,9 +17,9 @@ export type OptionType = {
   name: string;
 };
 
-export type Column = {
+export type Column<T> = {
   name: string;
-  uid: keyof UserListItem | 'actions';
+  uid: keyof T | 'actions';
   sortable?: boolean;
 };
 
