@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { AuthAction, Message, User, UserResponse } from '@/types';
+import toast from 'react-hot-toast';
 
 export const useAuth = (): [
   user: UserResponse | null,
@@ -35,26 +36,25 @@ export const useAuth = (): [
 
   // expires date will be saved in local storage, if it is not expired, no need to '/auth' route
   const getAuthStatus = async () => {
-    try {
-      // I don't know why but this executes twice
-      await axiosInstance.get('/auth');
-
-      // if not error, get user from local storage
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-        if (pathname === '/login' || pathname === '/sign-up') {
-          router.push('/');
+    await axiosInstance
+      .get('/auth')
+      .then(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+          setUser(JSON.parse(storedUser));
+          if (pathname === '/login' || pathname === '/sign-up') {
+            router.push('/');
+          }
         }
-      }
-    } catch (error: AxiosError | any) {
-      console.error((error as AxiosError)?.response?.data);
-      localStorage.removeItem('user');
-      setUser(null);
-      if (pathname !== '/login' && pathname !== '/sign-up') {
-        router.push('/login');
-      }
-    }
+      })
+      .catch((error: AxiosError<Message>) => {
+        console.error(error.response?.data);
+        localStorage.removeItem('user');
+        setUser(null);
+        if (pathname !== '/login' && pathname !== '/sign-up') {
+          router.push('/login');
+        }
+      });
   };
 
   // get auth status on page load by get method and /auth route
@@ -63,21 +63,22 @@ export const useAuth = (): [
       getAuthStatus();
       authFetched.current = true;
     }
-    // don't update on axiosInstance. no need to update on path change also;
-    // since we alreaady have push (prevent one more render) - CAN delete pathname later
+    // don't update on axiosInstance. CAN delete pathname later
   }, [pathname]);
 
-  const login: AuthAction = async (user, setError) => {
-    try {
-      const response = await axiosInstance.post('/login', user);
-      const userResponse: UserResponse = response.data.user;
-      localStorage.setItem('user', JSON.stringify(userResponse));
-      setUser(userResponse);
-      router.push('/');
-    } catch (error: AxiosError | any) {
-      console.error((error as AxiosError)?.response?.data);
-      setError(error?.response?.data as Message);
-    }
+  const login: AuthAction = async (user) => {
+    await axiosInstance
+      .post('/login', user)
+      .then((response) => {
+        const userResponse: UserResponse = response.data.user;
+        localStorage.setItem('user', JSON.stringify(userResponse));
+        setUser(userResponse);
+        router.push('/');
+      })
+      .catch((error: AxiosError<Message>) => {
+        console.error(error.response?.data);
+        toast.error(error.response?.data.message || 'Failed to login');
+      });
   };
 
   const logout = () => {
@@ -86,17 +87,19 @@ export const useAuth = (): [
     router.push('/login');
   };
 
-  const signUp: AuthAction = async (user, setError) => {
-    try {
-      const response = await axios.post(`${baseURL}/signup`, user);
-      const userResponse: UserResponse = response.data.user;
-      localStorage.setItem('user', JSON.stringify(userResponse));
-      setUser(userResponse);
-      router.push('/');
-    } catch (error: AxiosError | any) {
-      console.error((error as AxiosError)?.response?.data);
-      setError(error?.response?.data as Message);
-    }
+  const signUp: AuthAction = async (user) => {
+    await axiosInstance
+      .post('/signup', user)
+      .then((response) => {
+        const userResponse: UserResponse = response.data.user;
+        localStorage.setItem('user', JSON.stringify(userResponse));
+        setUser(userResponse);
+        router.push('/');
+      })
+      .catch((error: AxiosError<Message>) => {
+        console.error(error.response?.data);
+        toast.error(error.response?.data.message || 'Failed to sign up');
+      });
   };
 
   return [user, login, logout, signUp];
