@@ -13,10 +13,6 @@ export default function LoginPage() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const [error, setError] = useState<Message>({
-    message: '',
-  });
-
   const [userCridentials, setUserCredentials] = useState<UserCredentials>({
     username: '',
     password: '',
@@ -35,7 +31,6 @@ export default function LoginPage() {
           }
           label='Username'
           isRequired
-          errorMessage={error && error.message}
         />
         <Input
           name='password'
@@ -69,7 +64,7 @@ export default function LoginPage() {
             </Link>
           </div>
           <Button
-            onClick={() => login(userCridentials, setError)}
+            onClick={() => login(userCridentials)}
             // primary
             type='submit'
             color='primary'
