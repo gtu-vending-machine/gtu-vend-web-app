@@ -5,6 +5,7 @@ import { fontSans } from '@/config/fonts';
 import { Providers } from './providers';
 import clsx from 'clsx';
 import { Layout as AppLayout } from '@/components/layouts/app-layout';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata: Metadata = {
   title: {
@@ -39,6 +40,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: 'class', defaultTheme: 'dark' }}>
           <AppLayout>{children}</AppLayout>
+          <Toaster />
         </Providers>
       </body>
     </html>
