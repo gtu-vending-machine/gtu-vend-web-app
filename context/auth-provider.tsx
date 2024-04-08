@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
-import { AuthAction, UserResponse } from '@/types';
+import { AuthAction, UserResponse } from '@/types/user';
 import { createContext } from 'react';
 
 export const AuthContext = createContext<{

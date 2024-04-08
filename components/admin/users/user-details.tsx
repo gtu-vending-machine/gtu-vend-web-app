@@ -1,6 +1,12 @@
 'use client';
 
-import React, { useCallback, useContext, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import {
   Spinner,
   Slider,
@@ -15,7 +21,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from '@nextui-org/react';
-import { UserListItem } from '@/types';
+import { UserListItem } from '@/types/user';
 
 import Drawer, {
   DrawerBody,
@@ -26,21 +32,16 @@ import Drawer, {
 import { AdminApiContext } from '@/context/admin-api-provider';
 import { UserIcon } from '@/components/icons';
 
-const roleOptions = [
-  { uid: 'admin', name: 'admin' },
-  { uid: 'user', name: 'user' },
-];
-
 const UserDetailDrawer = ({
   setIsOpen,
   isOpen,
   user,
   setUsers, // to update balance in the table
 }: {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
   isOpen: boolean;
   user: UserListItem | undefined;
-  setUsers: React.Dispatch<React.SetStateAction<UserListItem[]>>;
+  setUsers: Dispatch<SetStateAction<UserListItem[]>>;
 }) => {
   const { addBalance, deleteUser } = useContext(AdminApiContext);
   const [loading, setLoading] = useState(false);

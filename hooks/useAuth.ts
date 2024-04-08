@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
-import { AuthAction, Message, User, UserResponse } from '@/types';
+import { Message } from '@/types';
+import { AuthAction, User, UserResponse } from '@/types/user';
 import toast from 'react-hot-toast';
 
 export const useAuth = (): [

@@ -1,7 +1,8 @@
 'use client';
-import Users from '@/components/admin/users';
+import UserTable from '@/components/admin/users';
 import { AdminApiContext } from '@/context/admin-api-provider';
-import { Query, UserListItem } from '@/types';
+import { Query } from '@/types';
+import { UserListItem } from '@/types/user';
 import { NextPage } from 'next';
 import React, { useContext, useEffect, useState } from 'react';
 
@@ -22,11 +23,11 @@ const columns: Column[] = [
 const UsersPage: NextPage = () => {
   const { getUsersWithQuery } = useContext(AdminApiContext);
   const [users, setUsers] = useState<UserListItem[]>([]);
-  const [query, setQuery] = useState<Query<UserListItem>>({ query: {} });
+  const [query, setQuery] = useState<Query>({ query: {} });
   const [count, setCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchUsers = async (q: Query<UserListItem>) => {
+  const fetchUsers = async (q: Query) => {
     setLoading(true);
     const data = await getUsersWithQuery(q);
     if (data) {
@@ -42,9 +43,9 @@ const UsersPage: NextPage = () => {
 
   return (
     <>
-      <Users
-        users={users}
-        setUsers={setUsers}
+      <UserTable
+        data={users}
+        setData={setUsers}
         loading={loading}
         columns={columns}
         count={count}

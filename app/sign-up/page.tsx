@@ -2,7 +2,8 @@
 
 import { EyeFilledIcon, EyeSlashFilledIcon, Logo } from '@/components/icons';
 import { AuthContext } from '@/context/auth-provider';
-import { Message, UserCredentials } from '@/types';
+import { Message } from '@/types';
+import { UserCredentials } from '@/types/user';
 import { Button, Card, Input, Link } from '@nextui-org/react';
 import { useContext, useState } from 'react';
 

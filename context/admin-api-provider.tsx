@@ -1,6 +1,7 @@
 'use client';
 
-import { Message, Query, User, UserListItem, UserQueryResponse } from '@/types';
+import { Message, Query } from '@/types';
+import { User, UserListItem, UserQueryResponse } from '@/types/user';
 import axios, { Axios, AxiosError } from 'axios';
 import { createContext } from 'react';
 import toast from 'react-hot-toast';
