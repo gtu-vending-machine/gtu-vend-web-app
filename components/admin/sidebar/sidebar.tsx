@@ -11,6 +11,7 @@ import { HomeIcon } from '@/components/icons/sidebar/home-icon';
 import { AccountsIcon } from '@/components/icons/sidebar/accounts-icon';
 import { ProductsIcon } from '@/components/icons/sidebar/products-icon';
 import { Route } from '@/config/site';
+import { VendingMachineIcon } from '@/components/icons/sidebar/vending-machine-icon';
 
 export const SidebarWrapper = () => {
   const pathname = usePathname() as Route;
@@ -50,6 +51,12 @@ export const SidebarWrapper = () => {
                 title='Products'
                 icon={<ProductsIcon />}
                 href='/admin/products'
+              />
+              <SidebarItem
+                isActive={pathname === '/admin/vending-machines'}
+                title='Vending Machines'
+                icon={<VendingMachineIcon />}
+                href='/admin/vending-machines'
               />
             </SidebarMenu>
           </div>
