@@ -8,6 +8,11 @@ import {
   UpdateProductPayload,
 } from '@/types/product';
 import { User, UserListItem, UserQueryResponse } from '@/types/user';
+import {
+  CreateVendingMachinePayload,
+  VendingMachineListItem,
+  VendingMachineQueryResponse,
+} from '@/types/vending-machines';
 import axios, { AxiosError } from 'axios';
 import { createContext, useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -206,6 +211,57 @@ export const updateProduct = async (
     });
 };
 
+// ------------------ Vending Machine API ------------------
+// get vending machines from the server
+export const getVendingMachines = async (): Promise<
+  VendingMachineListItem[] | undefined
+> => {
+  return axiosInstance
+    .get('/vendingMachines')
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to get vending machines',
+      );
+      return;
+    });
+};
+// get vending machine by query
+export const getVendingMachinesWithQuery = async (
+  query: Query,
+): Promise<VendingMachineQueryResponse | undefined> => {
+  return axiosInstance
+    .post('/vendingMachines/query', query)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to get vending machines',
+      );
+      return;
+    });
+};
+
+// crete vending machine
+export const createVendingMachine = async (
+  vendingMachine: CreateVendingMachinePayload,
+): Promise<VendingMachineListItem | undefined> => {
+  return axiosInstance
+    .post('/vendingMachines', vendingMachine)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to create vending machine',
+      );
+      return;
+    });
+};
+
 export const AdminApiContext = createContext({
   getUsers: getUsers,
   getUser: getUser,
@@ -219,6 +275,9 @@ export const AdminApiContext = createContext({
   getProductsWithQuery: getProductsWithQuery,
   createProduct: createProduct,
   updateProduct: updateProduct,
+  getVendingMachines: getVendingMachines,
+  getVendingMachinesWithQuery: getVendingMachinesWithQuery,
+  createVendingMachine: createVendingMachine,
 });
 
 export const AdminApiProvider = ({
@@ -240,6 +299,9 @@ export const AdminApiProvider = ({
       getProductsWithQuery,
       createProduct,
       updateProduct,
+      getVendingMachines,
+      getVendingMachinesWithQuery,
+      createVendingMachine,
     }),
     [],
   );
