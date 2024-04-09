@@ -5,6 +5,7 @@ import {
   CreateProductPayload,
   ProductListItem,
   ProductQueryResponse,
+  UpdateProductPayload,
 } from '@/types/product';
 import { User, UserListItem, UserQueryResponse } from '@/types/user';
 import axios, { AxiosError } from 'axios';
@@ -178,7 +179,7 @@ export const createProduct = async (
 // update product
 export const updateProduct = async (
   id: number,
-  product: CreateProductPayload,
+  product: UpdateProductPayload,
 ): Promise<ProductListItem | undefined> => {
   return axiosInstance
     .put(`/products/${id}`, product)
