@@ -15,7 +15,7 @@ import { SearchIcon } from '@/components/icons/table/search-icon';
 import { ChevronDownIcon } from '@/components/icons/table/chevron-down-icon';
 import { Column, OptionType } from '@/types';
 
-const useTopContent = ({
+const useTopContent = <T,>({
   count,
   columns,
   searchValue,
@@ -29,9 +29,10 @@ const useTopContent = ({
   onOptionSelectionChange,
   onRowsPerPageChange,
   setVisibleColumns,
+  addItemComponent,
 }: {
   count: number;
-  columns: Column[];
+  columns: Column<T>[];
   searchValue: string;
   options?: OptionType[];
   optionSelection?: Selection;
@@ -43,6 +44,7 @@ const useTopContent = ({
   onOptionSelectionChange?: (selection: Selection) => void;
   onRowsPerPageChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   setVisibleColumns: Dispatch<SetStateAction<Selection>>;
+  addItemComponent?: React.ReactNode;
 }) => {
   const topContent = useMemo(() => {
     return (
@@ -58,7 +60,7 @@ const useTopContent = ({
             onValueChange={onSearchValueChange}
           />
           <div className='flex gap-3'>
-            {selectionOption && (
+            {selectionOption && options && (
               <Dropdown>
                 <DropdownTrigger className='hidden sm:flex'>
                   <Button
@@ -68,22 +70,21 @@ const useTopContent = ({
                     {capitalize(selectionOption.name)}
                   </Button>
                 </DropdownTrigger>
-                {options && (
-                  <DropdownMenu
-                    disallowEmptySelection
-                    aria-label='Table Columns'
-                    closeOnSelect={false}
-                    selectedKeys={optionSelection}
-                    selectionMode='multiple'
-                    onSelectionChange={onOptionSelectionChange}
-                  >
-                    {options.map((options) => (
-                      <DropdownItem key={options.uid} className='capitalize'>
-                        {capitalize(options.name)}
-                      </DropdownItem>
-                    ))}
-                  </DropdownMenu>
-                )}
+
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label='Table Columns'
+                  closeOnSelect={false}
+                  selectedKeys={optionSelection}
+                  selectionMode='multiple'
+                  onSelectionChange={onOptionSelectionChange}
+                >
+                  {options.map((options) => (
+                    <DropdownItem key={options.uid} className='capitalize'>
+                      {capitalize(options.name)}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
               </Dropdown>
             )}
             <Dropdown>
@@ -104,7 +105,10 @@ const useTopContent = ({
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className='capitalize'>
+                  <DropdownItem
+                    key={column.uid as string}
+                    className='capitalize'
+                  >
                     {capitalize(column.name)}
                   </DropdownItem>
                 ))}
@@ -113,6 +117,7 @@ const useTopContent = ({
             {/* <Button color='primary' endContent={<PlusIcon />}>
               Add New
             </Button> */}
+            {addItemComponent ?? null}
           </div>
         </div>
         <div className='flex justify-between items-center'>
