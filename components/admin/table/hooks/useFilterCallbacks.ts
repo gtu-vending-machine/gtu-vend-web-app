@@ -23,7 +23,7 @@ const useFilterCallbacks = ({
   setOptionSelection: Dispatch<SetStateAction<Selection>>;
   rowsPerPage: number;
   query: Query;
-  options: OptionType[];
+  options?: OptionType[];
   searchOption: OptionType;
   selectionOption?: OptionType;
 }) => {
@@ -71,7 +71,7 @@ const useFilterCallbacks = ({
 
   const onOptionSelectionChange = useCallback(
     (selection: Selection) => {
-      if (selectionOption) {
+      if (selectionOption && options) {
         setOptionSelection(selection);
         setPage(1);
 

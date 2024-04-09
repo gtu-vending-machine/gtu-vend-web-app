@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Query } from '@/types';
 
-const usePageCallbacks = <T extends { name: string }>({
+const usePageCallbacks = ({
   page,
   pages,
   setPage,
