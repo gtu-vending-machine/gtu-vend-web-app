@@ -92,7 +92,7 @@ export default function TableOutline<T extends { id: number; name: string }>({
     query,
     setOptionSelection,
     setSortDescriptor,
-    // options,
+    options,
     searchOption,
     selectionOption,
   });

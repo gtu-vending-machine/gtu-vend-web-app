@@ -43,7 +43,7 @@ const UserDetailDrawer = ({
   user: UserListItem | undefined;
   setUsers: Dispatch<SetStateAction<UserListItem[]>>;
 }) => {
-  const { addBalance, deleteUser } = useContext(AdminApiContext);
+  const { addBalance, deleteUser, resetBalance } = useContext(AdminApiContext);
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(50);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -79,6 +79,23 @@ const UserDetailDrawer = ({
       setIsOpen(false);
     }
   }, [deleteUser, setIsOpen, setUsers, user]);
+
+  const resetBalanceCallBack = useCallback(async () => {
+    if (!user) return;
+
+    setLoading(true);
+    const data = await resetBalance(user.id);
+    setLoading(false);
+
+    if (typeof data.balance === 'number') {
+      const updatedUser = {
+        ...user,
+        balance: data.balance,
+      };
+
+      setUsers((prev) => prev.map((u) => (u.id === user.id ? updatedUser : u)));
+    }
+  }, [resetBalance, setUsers, user]);
 
   return (
     user && (
@@ -158,7 +175,7 @@ const UserDetailDrawer = ({
                   <CardHeader>
                     <p className='text-sm text-danger-500'>Danger Zone</p>
                   </CardHeader>
-                  <CardFooter>
+                  <CardFooter className='flex justify-between'>
                     <Popover showArrow placement='bottom' backdrop={'opaque'}>
                       <PopoverTrigger>
                         <Button
@@ -187,6 +204,14 @@ const UserDetailDrawer = ({
                         </div>
                       </PopoverContent>
                     </Popover>
+                    <Button
+                      size='sm'
+                      color='danger'
+                      variant='light'
+                      onClick={resetBalanceCallBack}
+                    >
+                      Reset Balance
+                    </Button>
                   </CardFooter>
                 </Card>
               </DrawerFooter>

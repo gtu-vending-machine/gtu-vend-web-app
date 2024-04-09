@@ -102,6 +102,20 @@ export const addBalance = async (
     });
 };
 
+export const resetBalance = async (
+  id: number,
+): Promise<Pick<User, 'id' | 'balance'>> => {
+  return axiosInstance
+    .post(`/users/${id}/resetBalance`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(error.response?.data.message || 'Failed to reset balance');
+      return;
+    });
+};
+
 // ------------------ Product API ------------------
 // get products from the server
 export const getProducts = async (): Promise<ProductListItem[] | undefined> => {
@@ -198,6 +212,7 @@ export const AdminApiContext = createContext({
   deleteUser: deleteUser,
   getUsersWithQuery: getUsersWithQuery,
   addBalance: addBalance,
+  resetBalance: resetBalance,
   getProducts: getProducts,
   getProduct: getProduct,
   deleteProduct: deleteProduct,
@@ -218,6 +233,7 @@ export const AdminApiProvider = ({
       deleteUser,
       getUsersWithQuery,
       addBalance,
+      resetBalance,
       getProducts,
       getProduct,
       deleteProduct,
