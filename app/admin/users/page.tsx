@@ -1,16 +1,10 @@
 'use client';
 import UserTable from '@/components/admin/users';
 import { AdminApiContext } from '@/context/admin-api-provider';
-import { Query } from '@/types';
+import { Column, Query } from '@/types';
 import { UserListItem } from '@/types/user';
 import { NextPage } from 'next';
 import React, { useContext, useEffect, useState } from 'react';
-
-type Column<T> = {
-  name: string;
-  uid: keyof T | 'actions';
-  sortable?: boolean;
-};
 
 const columns: Column<UserListItem>[] = [
   { name: 'ID', uid: 'id', sortable: true },

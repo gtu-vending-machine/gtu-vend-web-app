@@ -15,6 +15,7 @@ import {
   Selection,
   SortDescriptor,
   TableBodyProps,
+  Button,
 } from '@nextui-org/react';
 import { Column, OptionType, Query } from '@/types';
 
@@ -33,18 +34,20 @@ export default function TableOutline<T extends { id: number; name: string }>({
   searchOption,
   selectionOption,
   children,
+  addItemComponent,
 }: {
   count: number;
   columns: Column<T>[];
   query: Query;
   setQuery: Dispatch<SetStateAction<Query>>;
-  options: OptionType[]; // option for filtering (on header)
+  options?: OptionType[]; // option for filtering (on header)
   searchOption: OptionType;
   selectionOption?: OptionType;
   children: ReactElement<
     TableBodyProps<object>,
     string | JSXElementConstructor<any>
   >;
+  addItemComponent?: React.ReactNode;
 }) {
   const [page, setPage] = useState(1);
   const [searchValue, setsearchValue] = useState('');
@@ -67,7 +70,7 @@ export default function TableOutline<T extends { id: number; name: string }>({
   }, [visibleColumns]);
 
   const { onRowsPerPageChange, onPageChange, onPreviousPage, onNextPage } =
-    usePageCallbacks<T>({
+    usePageCallbacks({
       page,
       pages,
       setPage,
@@ -89,12 +92,12 @@ export default function TableOutline<T extends { id: number; name: string }>({
     query,
     setOptionSelection,
     setSortDescriptor,
-    options,
+    // options,
     searchOption,
     selectionOption,
   });
 
-  const topContent = useTopContent({
+  const topContent = useTopContent<T>({
     count,
     columns,
     options, // optional
@@ -108,6 +111,7 @@ export default function TableOutline<T extends { id: number; name: string }>({
     onRowsPerPageChange,
     onClear,
     setVisibleColumns,
+    addItemComponent,
   });
 
   const bottomContent = useBottomContent({
