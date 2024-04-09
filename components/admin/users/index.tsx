@@ -5,7 +5,7 @@ import { TableBody, TableRow, TableCell, Spinner } from '@nextui-org/react';
 import { Column, OptionType, Query } from '@/types';
 import { UserListItem } from '@/types/user';
 
-import useRenderCell from '../table/hooks/useRenderCell';
+import useRenderUserTableCell from '../table/hooks/useRenderUserTableCell';
 import UserDetailDrawer from './user-details';
 import TableOutline from '../table/table-outline';
 
@@ -37,7 +37,7 @@ export default function UserTable({
   const [isOpen, setIsOpen] = useState(false);
   const [userId, setUserId] = useState<number>(0);
 
-  const renderCell = useRenderCell({
+  const renderUserTableCell = useRenderUserTableCell({
     setUserId,
     setIsOpen,
   });
@@ -50,8 +50,8 @@ export default function UserTable({
         query={query}
         setQuery={setQuery}
         options={selectionOptions}
-        searchOption={searchOption}
         selectionOption={selectionOption}
+        searchOption={searchOption}
       >
         <TableBody
           emptyContent={'No data found'}
@@ -62,7 +62,7 @@ export default function UserTable({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>{renderUserTableCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
           )}
