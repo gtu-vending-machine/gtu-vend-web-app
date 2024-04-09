@@ -14,10 +14,6 @@ export default function SignUpPage() {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const [error, setError] = useState<Message>({
-    message: '',
-  });
-
   const [userCridentials, setUserCredentials] = useState<UserCredentials>({
     name: '',
     username: '',
@@ -37,7 +33,6 @@ export default function SignUpPage() {
           }
           label='Username'
           isRequired
-          errorMessage={error && error.message}
         />
         <Input
           name='name'
@@ -81,7 +76,7 @@ export default function SignUpPage() {
             </Link>
           </div>
           <Button
-            onClick={() => signUp(userCridentials, setError)}
+            onClick={() => signUp(userCridentials)}
             // primary
             type='submit'
             color='primary'
