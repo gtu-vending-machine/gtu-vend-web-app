@@ -23,4 +23,5 @@ export type Route =
   | '/about'
   | '/admin'
   | '/admin/users'
-  | '/admin/products';
+  | '/admin/products'
+  | '/admin/vending-machines';

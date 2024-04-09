@@ -23,7 +23,7 @@ export type UserListItem = UserResponse & {
 
 export type UserQueryResponse = {
   users: UserListItem[];
-  count: number;
+  _count: number;
 };
 
 export type UserCredentials = Pick<User, 'username' | 'password' | 'name'>;

@@ -9,7 +9,7 @@ export type ProductListItem = Product;
 
 export type ProductQueryResponse = {
   products: ProductListItem[];
-  count: number;
+  _count: number;
 };
 
 export type CreateProductPayload = Pick<Product, 'name' | 'price' | 'image'>;
