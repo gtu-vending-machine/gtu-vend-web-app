@@ -1,9 +1,5 @@
 'use client';
 
-/* 
-BU Dosyalarin adini degistiricem !!!!!
-*/
-
 import React, {
   Dispatch,
   Key,
