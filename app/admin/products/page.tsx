@@ -26,7 +26,7 @@ const ProductsPage: NextPage = () => {
     const data = await getProductsWithQuery(q);
     if (data) {
       setProducts(data.products);
-      setCount(data.count);
+      setCount(data._count);
     }
     setLoading(false);
   };

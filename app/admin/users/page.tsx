@@ -26,7 +26,7 @@ const UsersPage: NextPage = () => {
     const data = await getUsersWithQuery(q);
     if (data) {
       setUsers(data.users);
-      setCount(data.count);
+      setCount(data._count);
     }
     setLoading(false);
   };

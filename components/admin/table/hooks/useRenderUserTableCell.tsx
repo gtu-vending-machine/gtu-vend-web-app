@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Dispatch, Key, SetStateAction, useCallback } from 'react';
-import { Button, Chip, User, ChipProps } from '@nextui-org/react';
+import { Button, Chip, User, ChipProps, AvatarIcon } from '@nextui-org/react';
 import { UserListItem } from '@/types/user';
 
 export const roleColorMap: Record<string, ChipProps['color']> = {
@@ -26,13 +26,12 @@ const useRenderUserTableCell = ({
             <User
               avatarProps={{
                 radius: 'lg',
-                name: user.name,
+                size: 'lg',
+                fallback: <AvatarIcon />,
               }}
-              description={user.username}
+              description={`@${user.username}`}
               name={cellValue}
-            >
-              {user.username}
-            </User>
+            />
           );
         case 'role':
           return (
@@ -55,6 +54,7 @@ const useRenderUserTableCell = ({
                   setUserId(user.id);
                   setIsOpen(true);
                 }}
+                color='primary'
               >
                 View
               </Button>

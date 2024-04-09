@@ -24,11 +24,11 @@ import toast from 'react-hot-toast';
 
 const useRenderProductTableCell = ({
   setData,
-  setClickedProduct,
+  setClickedItem,
   onOpen,
 }: {
   setData: Dispatch<SetStateAction<ProductListItem[]>>;
-  setClickedProduct: Dispatch<SetStateAction<Partial<ProductListItem>>>;
+  setClickedItem: Dispatch<SetStateAction<Partial<ProductListItem>>>;
   onOpen: () => void;
 }) => {
   const { deleteProduct } = useContext(AdminApiContext);
@@ -57,11 +57,8 @@ const useRenderProductTableCell = ({
                 name: product.name,
                 src: product.image,
               }}
-              description={product.name}
               name={cellValue}
-            >
-              {product.name}
-            </User>
+            />
           );
         case 'price':
           return <p>{cellValue}💰</p>;
@@ -73,7 +70,7 @@ const useRenderProductTableCell = ({
                 className='text-lg text-default-400 cursor-pointer active:opacity-50'
                 onClick={() => {
                   onOpen();
-                  setClickedProduct(product);
+                  setClickedItem(product);
                 }}
               >
                 <EditIcon />

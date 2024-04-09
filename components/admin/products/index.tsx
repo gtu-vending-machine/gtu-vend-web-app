@@ -36,9 +36,7 @@ export default function ProductTable({
   setQuery: Dispatch<SetStateAction<Query>>;
 }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [clickedProduct, setClickedProduct] = useState<
-    Partial<ProductListItem>
-  >({
+  const [clickedItem, setClickedItem] = useState<Partial<ProductListItem>>({
     id: 0,
     name: '',
     price: 0,
@@ -47,7 +45,7 @@ export default function ProductTable({
 
   const renderProductTableCell = useRenderProductTableCell({
     setData,
-    setClickedProduct,
+    setClickedItem,
     onOpen,
   });
 
@@ -76,13 +74,13 @@ export default function ProductTable({
           )}
         </TableBody>
       </TableOutline>
-      {clickedProduct && (
+      {clickedItem && (
         <UpdateProductModal
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           setData={setData}
-          clickedProduct={clickedProduct}
-          setClickedProduct={setClickedProduct}
+          clickedItem={clickedItem}
+          setClickedItem={setClickedItem}
         />
       )}
     </>

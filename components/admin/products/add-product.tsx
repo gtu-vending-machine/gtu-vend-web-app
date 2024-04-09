@@ -10,6 +10,7 @@ import {
 } from '@nextui-org/react';
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
 import { ProductModalBody } from './product-modal-body';
+import { PlusIcon } from '@/components/icons';
 
 export const AddProduct = ({
   setData,
@@ -41,8 +42,8 @@ export const AddProduct = ({
   return (
     <div>
       <>
-        <Button onPress={onOpen} color='primary'>
-          Add Product
+        <Button onPress={onOpen} color='primary' startContent={<PlusIcon />}>
+          Add
         </Button>
         <Modal
           isOpen={isOpen}

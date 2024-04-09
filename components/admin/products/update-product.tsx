@@ -16,16 +16,16 @@ import { ProductModalBody } from './product-modal-body';
 
 export const UpdateProductModal = ({
   isOpen,
-  clickedProduct,
+  clickedItem,
   setData,
   onOpenChange,
-  setClickedProduct,
+  setClickedItem,
 }: {
   isOpen: boolean;
-  clickedProduct: Partial<ProductListItem>;
+  clickedItem: Partial<ProductListItem>;
   setData: Dispatch<SetStateAction<ProductListItem[]>>;
   onOpenChange: () => void;
-  setClickedProduct: Dispatch<SetStateAction<Partial<ProductListItem>>>;
+  setClickedItem: Dispatch<SetStateAction<Partial<ProductListItem>>>;
 }) => {
   const { updateProduct } = useContext(AdminApiContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,8 +57,8 @@ export const UpdateProductModal = ({
               Update Product
             </ModalHeader>
             <ProductModalBody
-              product={clickedProduct}
-              setProduct={setClickedProduct}
+              product={clickedItem}
+              setProduct={setClickedItem}
             />
             <ModalFooter>
               <Button color='danger' variant='flat' onClick={onClose}>
@@ -69,12 +69,8 @@ export const UpdateProductModal = ({
                 isLoading={isLoading}
                 isDisabled={isLoading}
                 onClick={() => {
-                  if (clickedProduct && clickedProduct.id) {
-                    handleUpdateProduct(
-                      clickedProduct.id,
-                      clickedProduct,
-                      onClose,
-                    );
+                  if (clickedItem && clickedItem.id) {
+                    handleUpdateProduct(clickedItem.id, clickedItem, onClose);
                   }
                 }}
               >
