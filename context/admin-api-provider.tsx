@@ -9,7 +9,10 @@ import {
 } from '@/types/product';
 import { User, UserListItem, UserQueryResponse } from '@/types/user';
 import {
+  AddProductToSlotPayload,
   CreateVendingMachinePayload,
+  Slot,
+  VendingMachine,
   VendingMachineListItem,
   VendingMachineQueryResponse,
 } from '@/types/vending-machines';
@@ -228,6 +231,24 @@ export const getVendingMachines = async (): Promise<
       return;
     });
 };
+
+// get vending machine by id
+export const getVendingMachine = async (
+  id: number,
+): Promise<VendingMachine | undefined> => {
+  return axiosInstance
+    .get(`/vendingMachines/${id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to get vending machine',
+      );
+      return;
+    });
+};
+
 // get vending machine by query
 export const getVendingMachinesWithQuery = async (
   query: Query,
@@ -262,22 +283,77 @@ export const createVendingMachine = async (
     });
 };
 
+// delete vending machine
+export const deleteVendingMachine = async (
+  id: number,
+): Promise<VendingMachineListItem | undefined> => {
+  return axiosInstance
+    .delete(`/vendingMachines/${id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to delete vending machine',
+      );
+      return;
+    });
+};
+
+// ------------------ Slots API ------------------
+export const addProductToSlot = async (
+  id: number,
+  payload: AddProductToSlotPayload,
+): Promise<Slot | undefined> => {
+  return axiosInstance
+    .post(`/slots/${id}/product`, payload)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to add product to slot',
+      );
+      return;
+    });
+};
+
+export const deleteProductFromSlot = async (
+  id: number,
+): Promise<Slot | undefined> => {
+  return axiosInstance
+    .delete(`/slots/${id}/product`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error: AxiosError<Message>) => {
+      toast.error(
+        error.response?.data.message || 'Failed to delete product from slot',
+      );
+      return;
+    });
+};
+
 export const AdminApiContext = createContext({
-  getUsers: getUsers,
-  getUser: getUser,
-  deleteUser: deleteUser,
-  getUsersWithQuery: getUsersWithQuery,
-  addBalance: addBalance,
-  resetBalance: resetBalance,
-  getProducts: getProducts,
-  getProduct: getProduct,
-  deleteProduct: deleteProduct,
-  getProductsWithQuery: getProductsWithQuery,
-  createProduct: createProduct,
-  updateProduct: updateProduct,
-  getVendingMachines: getVendingMachines,
-  getVendingMachinesWithQuery: getVendingMachinesWithQuery,
-  createVendingMachine: createVendingMachine,
+  getUsers,
+  getUser,
+  deleteUser,
+  getUsersWithQuery,
+  addBalance,
+  resetBalance,
+  getProducts,
+  getProduct,
+  deleteProduct,
+  getProductsWithQuery,
+  createProduct,
+  updateProduct,
+  getVendingMachines,
+  getVendingMachine,
+  getVendingMachinesWithQuery,
+  createVendingMachine,
+  deleteVendingMachine,
+  addProductToSlot,
+  deleteProductFromSlot,
 });
 
 export const AdminApiProvider = ({
@@ -300,8 +376,12 @@ export const AdminApiProvider = ({
       createProduct,
       updateProduct,
       getVendingMachines,
+      getVendingMachine,
       getVendingMachinesWithQuery,
       createVendingMachine,
+      deleteVendingMachine,
+      addProductToSlot,
+      deleteProductFromSlot,
     }),
     [],
   );
