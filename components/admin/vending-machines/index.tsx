@@ -1,13 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction, useState } from 'react';
-import {
-  TableBody,
-  TableRow,
-  TableCell,
-  Spinner,
-  useDisclosure,
-} from '@nextui-org/react';
+import { TableBody, TableRow, TableCell, Spinner } from '@nextui-org/react';
 import { Column, OptionType, Query } from '@/types';
 
 import TableOutline from '../table/table-outline';
