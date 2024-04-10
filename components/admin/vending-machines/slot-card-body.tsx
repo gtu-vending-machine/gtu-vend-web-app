@@ -64,6 +64,7 @@ const FullSlot = ({
     </>
   );
 };
+
 const EmptySlot = ({
   setSelectedSlot,
   slot,

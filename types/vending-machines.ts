@@ -7,6 +7,11 @@ export type Slot = {
   product: Product | null;
 };
 
+export type SlotDetail = Slot & {
+  vendingMachineId: number;
+  productId: number | null;
+};
+
 export type AddProductToSlotPayload = {
   productId: number;
   stock: number;

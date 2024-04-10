@@ -2,6 +2,7 @@
 
 import { VendingMachineListItem } from '@/types/vending-machines';
 import {
+  Avatar,
   Card,
   CardBody,
   CardFooter,
@@ -9,8 +10,8 @@ import {
   Divider,
 } from '@nextui-org/react';
 import Link from 'next/link';
-
-const PAGE_SIZE = 8;
+import { VendingMachineIcon } from '../icons/sidebar/vending-machine-icon';
+import { PAGE_SIZE } from '.';
 
 const HasVendingMachine = ({
   vendingmachines,
@@ -22,7 +23,7 @@ const HasVendingMachine = ({
   if (vendingmachines.length === 0) return;
 
   return (
-    <div className='w-full grid sm:grid-cols-4 gap-4 mt-4 grid-cols-2'>
+    <div className='w-full grid sm:grid-cols-3 gap-4 mt-4 grid-cols-2'>
       {vendingmachines.map((vendingmachine, index) => {
         return (
           <Card
@@ -44,10 +45,18 @@ const HasVendingMachine = ({
                 </p>
               </CardHeader>
               <CardBody>
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-4'>
+                  <div className='flex items-center justify-center'>
+                    <Avatar
+                      size='lg'
+                      radius='sm'
+                      name={vendingmachine.name}
+                      fallback={<VendingMachineIcon />}
+                    />
+                  </div>
                   <p>
                     <span className='font-light'>
-                      total slots: {vendingmachine._slotCount}
+                      slots: {vendingmachine._slotCount}
                     </span>
                   </p>
                 </div>

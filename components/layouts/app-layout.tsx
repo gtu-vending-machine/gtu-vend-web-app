@@ -1,7 +1,6 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useContext } from 'react';
 import { Navbar } from '../navbar';
 
 // paths start with followings are not allowed to application layout
