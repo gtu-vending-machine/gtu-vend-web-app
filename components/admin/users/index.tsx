@@ -35,10 +35,10 @@ export default function UserTable({
   setQuery: Dispatch<SetStateAction<Query>>;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [userId, setUserId] = useState<number>(0);
+  const [clickedItemId, setClickedItemId] = useState<number>(0);
 
   const renderUserTableCell = useRenderUserTableCell({
-    setUserId,
+    setClickedItemId,
     setIsOpen,
   });
 
@@ -71,7 +71,7 @@ export default function UserTable({
       <UserDetailDrawer
         setIsOpen={setIsOpen}
         isOpen={isOpen}
-        user={data.find((user) => user.id === userId)}
+        user={data.find((user) => user.id === clickedItemId)}
         setUsers={setData}
       />
     </>
