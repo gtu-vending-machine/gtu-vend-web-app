@@ -25,9 +25,14 @@ const HasVendingMachine = ({
     <div className='w-full grid sm:grid-cols-4 gap-4 mt-4 grid-cols-2'>
       {vendingmachines.map((vendingmachine, index) => {
         return (
-          <Card shadow='sm' className='cursor-pointer' key={vendingmachine.id}>
+          <Card
+            shadow='sm'
+            className='cursor-pointer transition-colors duration-300 ease-in-out hover:bg-default-100'
+            key={vendingmachine.id}
+          >
             <Link
               href={`/vending-machines/${vendingmachine.id}`}
+              // transition on hover
               className='w-full h-full'
             >
               <CardHeader>
