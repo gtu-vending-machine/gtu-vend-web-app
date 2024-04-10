@@ -42,18 +42,4 @@ export type Query = {
   };
 };
 
-export type Dispenser = {
-  id: number;
-  index: number;
-  stock: number;
-  productId?: number;
-  vendingMachineId?: number;
-};
-
 export type Role = 'admin' | 'user' | 'vendingMachine';
-
-export type VendingMachine = {
-  id: number;
-  name: string;
-  dispensers: Dispenser[];
-};
