@@ -10,10 +10,10 @@ export const roleColorMap: Record<string, ChipProps['color']> = {
 };
 
 const useRenderUserTableCell = ({
-  setUserId,
+  setClickedItemId,
   setIsOpen,
 }: {
-  setUserId: Dispatch<SetStateAction<number>>;
+  setClickedItemId: Dispatch<SetStateAction<number>>;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const renderUserTableCell = useCallback(
@@ -51,7 +51,7 @@ const useRenderUserTableCell = ({
                 size='sm'
                 variant='light'
                 onClick={() => {
-                  setUserId(user.id);
+                  setClickedItemId(user.id);
                   setIsOpen(true);
                 }}
                 color='primary'
