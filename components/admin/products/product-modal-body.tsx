@@ -1,4 +1,4 @@
-import { PlusIcon } from '@/components/icons';
+import { DeleteIcon, PlusIcon } from '@/components/icons';
 import { CreateProductPayload, ProductListItem } from '@/types/product';
 import {
   Avatar,
@@ -38,18 +38,23 @@ const ImageUploader = ({
         />
       </VisuallyHidden>
       <label htmlFor='file'>
-        <Button
-          variant='flat'
-          color='primary'
+        <Avatar
+          size='lg'
+          src={product?.image}
+          className='cursor-pointer hover:opacity-80 transition-opacity'
+          radius='lg'
+          isBordered
+          icon={!product.image ? <PlusIcon /> : undefined}
           onClick={(e) => {
             e.preventDefault();
-            const fileInput = document.getElementById('file');
-            fileInput?.click();
+            if (product.image) {
+              setProduct({ ...product, image: '' });
+            } else {
+              const fileInput = document.getElementById('file');
+              fileInput?.click();
+            }
           }}
-          className='border-dashed border-1 border-primary-400 h-16 w-16 rounded-lg mr-4'
-        >
-          <PlusIcon />
-        </Button>
+        />
       </label>
     </div>
   );
@@ -64,43 +69,26 @@ export const ProductModalBody = ({
 }) => {
   return (
     <ModalBody className='gap-4'>
-      <Input
-        label='Name'
-        placeholder='Product name'
-        variant='flat'
-        value={product.name}
-        onChange={(e) => setProduct({ ...product, name: e.target.value })}
-        isRequired
-      />
+      <div className='flex items-center gap-4'>
+        <ImageUploader product={product} setProduct={setProduct} />
+        <Input
+          label='Name'
+          placeholder='Product name'
+          variant='flat'
+          value={product.name}
+          onChange={(e) => setProduct({ ...product, name: e.target.value })}
+          isRequired
+          size='lg'
+        />
+      </div>
       <Input
         label='Price'
         variant='flat'
         value={String(product.price)}
         onChange={(e) => setProduct({ ...product, price: +e.target.value })}
         isRequired
+        className='max-h-xs'
       />
-      <div className='flex items-center g-4 w-full'>
-        <ImageUploader product={product} setProduct={setProduct} />
-
-        {product.image ? (
-          <Avatar
-            size='lg'
-            src={product.image}
-            radius='lg'
-            isBordered
-            className='h-16 w-16'
-            onClick={() => setProduct({ ...product, image: '' })}
-          />
-        ) : (
-          <Avatar
-            size='lg'
-            radius='lg'
-            isBordered
-            name='img'
-            className='h-16 w-16'
-          />
-        )}
-      </div>
     </ModalBody>
   );
 };
