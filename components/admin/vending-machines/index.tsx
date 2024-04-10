@@ -14,6 +14,7 @@ import TableOutline from '../table/table-outline';
 import useRenderVendingMachineTableCell from '../table/hooks/useRenderVendingMachineTableCell';
 import { VendingMachineListItem } from '@/types/vending-machines';
 import { AddVendingMachine } from './add-vending-machine';
+import VendingMachineDetailDrawer from './vending-machine-details';
 
 const searchOption: OptionType = { uid: 'name', name: 'name' };
 
@@ -34,18 +35,12 @@ export default function VendingMachineTable({
   query: Query;
   setQuery: Dispatch<SetStateAction<Query>>;
 }) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [clickedItem, setClickedItem] = useState<
-    Partial<VendingMachineListItem>
-  >({
-    id: 0,
-    name: '',
-  });
+  const [isOpen, setIsOpen] = useState(false);
+  const [clickedItemId, setClickedItemId] = useState<number>(0);
 
   const renderVendingMachineTableCell = useRenderVendingMachineTableCell({
-    setData,
-    setClickedItem,
-    onOpen,
+    setClickedItemId,
+    setIsOpen,
   });
 
   return (
@@ -75,6 +70,12 @@ export default function VendingMachineTable({
           )}
         </TableBody>
       </TableOutline>
+      <VendingMachineDetailDrawer
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setVendingMachines={setData}
+        vendingMachineId={clickedItemId}
+      />
     </>
   );
 }
