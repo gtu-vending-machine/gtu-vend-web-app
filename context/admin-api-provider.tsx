@@ -16,18 +16,10 @@ import {
   VendingMachineListItem,
   VendingMachineQueryResponse,
 } from '@/types/vending-machines';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { createContext, useMemo } from 'react';
 import toast from 'react-hot-toast';
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-const axiosInstance = axios.create({
-  baseURL: apiUrl,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import { axiosInstance } from './api-provider';
 
 axiosInstance.interceptors.request.use((config) => {
   const storedUser = localStorage.getItem('user');
