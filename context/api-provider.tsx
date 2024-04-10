@@ -1,5 +1,6 @@
 'use client';
 
+import { Transaction } from '@/types/transactions';
 import { User } from '@/types/user';
 import { SlotDetail } from '@/types/vending-machines';
 import axios from 'axios';
@@ -46,8 +47,63 @@ export const getSlotsByVendingMachineAndProductName = async ({
     });
 };
 
+// ---------- Transaction API ----------
+export const createTransaction = async ({
+  userId,
+  slotId,
+}: {
+  userId: number;
+  slotId: number;
+}): Promise<Transaction | undefined> => {
+  return axiosInstance
+    .post('/transactions', {
+      slotId,
+      userId,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      return;
+    });
+};
+
+export const confirmTransaction = async ({
+  code,
+}: {
+  code: string;
+}): Promise<Pick<Transaction, 'hasConfirmed' | 'id'> | undefined> => {
+  return axiosInstance
+    .put('/transactions/confirm', {
+      code,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+      return;
+    });
+};
+
+// cancel transaction cancel/:id
+export const cancelTransaction = async (id: number): Promise<Transaction> => {
+  return axiosInstance
+    .delete(`/transactions/cancel/${id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
 export const ApiContext = createContext({
   getSlotsByVendingMachineAndProductName,
+  createTransaction,
+  confirmTransaction,
+  cancelTransaction,
 });
 
 export const AdminApiProvider = ({
@@ -58,6 +114,9 @@ export const AdminApiProvider = ({
   const contextValue = useMemo(
     () => ({
       getSlotsByVendingMachineAndProductName,
+      createTransaction,
+      confirmTransaction,
+      cancelTransaction,
     }),
     [],
   );
