@@ -60,7 +60,7 @@ const VendingMachineDetailDrawer = ({
   const { isOpen: isSlotModalOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedSlot, setSelectedSlot] = useState<Slot>();
 
-  const getVendingMachineCallBack = useCallback(async () => {
+  const getVendingMachineCallback = useCallback(async () => {
     // to get vending machine details
     if (!vendingMachineId) return;
     setLoading(true);
@@ -71,7 +71,7 @@ const VendingMachineDetailDrawer = ({
     }
   }, [vendingMachineId]);
 
-  const deleteVendingMachineCallBack = useCallback(async () => {
+  const deleteVendingMachineCallback = useCallback(async () => {
     if (!vendingMachineId) return;
     setDeleteLoading(true);
     const data = await deleteVendingMachine(vendingMachineId);
@@ -84,7 +84,7 @@ const VendingMachineDetailDrawer = ({
     }
   }, [vendingMachineId]);
 
-  const getProductsCallBack = useCallback(async () => {
+  const getProductsCallback = useCallback(async () => {
     // to select products for slots
     const data = await getProducts();
     if (data) {
@@ -94,12 +94,12 @@ const VendingMachineDetailDrawer = ({
 
   useEffect(() => {
     if (!vendingMachineId) return;
-    getVendingMachineCallBack();
+    getVendingMachineCallback();
   }, [vendingMachineId]);
 
   useEffect(() => {
     if (!products.length) {
-      getProductsCallBack();
+      getProductsCallback();
     }
   }, []);
 
@@ -208,7 +208,7 @@ const VendingMachineDetailDrawer = ({
                             size='sm'
                             color='danger'
                             className='w-fit'
-                            onClick={deleteVendingMachineCallBack}
+                            onClick={deleteVendingMachineCallback}
                             isLoading={deleteLoading}
                           >
                             Delete
@@ -229,7 +229,7 @@ const VendingMachineDetailDrawer = ({
           onOpenChange={onOpenChange}
           slot={selectedSlot}
           products={products}
-          getVendingMachineCallBack={getVendingMachineCallBack}
+          getVendingMachineCallback={getVendingMachineCallback}
         />
       )}
     </>
