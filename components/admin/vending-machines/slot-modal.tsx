@@ -24,13 +24,13 @@ const SlotModal = ({
   onOpenChange,
   slot,
   products,
-  getVendingMachineCallBack,
+  getVendingMachineCallback,
 }: {
   isSlotModalOpen: boolean;
   onOpenChange: () => void;
   slot: Slot;
   products: Product[];
-  getVendingMachineCallBack: () => Promise<void>; // to update vending machine details
+  getVendingMachineCallback: () => Promise<void>; // to update vending machine details
 }) => {
   const { addProductToSlot, deleteProductFromSlot } =
     useContext(AdminApiContext);
@@ -41,7 +41,7 @@ const SlotModal = ({
   const [stock, setStock] = useState<number | undefined>(slot?.stock);
 
   // callback for add/update product for slot
-  const addProductToSlotCallBack = useCallback(async () => {
+  const addProductToSlotCallback = useCallback(async () => {
     if (!productSelection || !slot) return;
 
     const payload: AddProductToSlotPayload = {
@@ -51,16 +51,16 @@ const SlotModal = ({
 
     const data: Slot | undefined = await addProductToSlot(slot.id, payload);
     if (data) {
-      getVendingMachineCallBack();
+      getVendingMachineCallback();
       onOpenChange();
     }
   }, [productSelection, slot, stock]);
 
-  const deleteProductCallBack = useCallback(async () => {
+  const deleteProductCallback = useCallback(async () => {
     if (!slot || !slot.product) return;
     const data = await deleteProductFromSlot(slot.id);
     if (data) {
-      getVendingMachineCallBack();
+      getVendingMachineCallback();
       onOpenChange();
     }
   }, [slot]);
@@ -137,7 +137,7 @@ const SlotModal = ({
                   color='danger'
                   variant='light'
                   size='sm'
-                  onPress={deleteProductCallBack}
+                  onPress={deleteProductCallback}
                 >
                   Remove
                 </Button>
@@ -154,7 +154,7 @@ const SlotModal = ({
                 <Button
                   color='primary'
                   size='sm'
-                  onPress={addProductToSlotCallBack}
+                  onPress={addProductToSlotCallback}
                 >
                   {slot.product ? 'Update' : 'Add'}
                 </Button>

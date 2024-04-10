@@ -48,7 +48,7 @@ const UserDetailDrawer = ({
   const [balance, setBalance] = useState(50);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const addBalanceCallBack = useCallback(async () => {
+  const addBalanceCallback = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -65,7 +65,7 @@ const UserDetailDrawer = ({
     }
   }, [user, balance, addBalance, setUsers]);
 
-  const deleteUserCallBack = useCallback(async () => {
+  const deleteUserCallback = useCallback(async () => {
     if (!user) return;
 
     setDeleteLoading(true);
@@ -80,7 +80,7 @@ const UserDetailDrawer = ({
     }
   }, [deleteUser, setIsOpen, setUsers, user]);
 
-  const resetBalanceCallBack = useCallback(async () => {
+  const resetBalanceCallback = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -164,7 +164,7 @@ const UserDetailDrawer = ({
                     type='submit'
                     size='sm'
                     className='mt-4'
-                    onClick={addBalanceCallBack}
+                    onClick={addBalanceCallback}
                   >
                     {`Add ${balance} 💰`}
                   </Button>
@@ -196,7 +196,7 @@ const UserDetailDrawer = ({
                             size='sm'
                             color='danger'
                             className='w-fit'
-                            onClick={deleteUserCallBack}
+                            onClick={deleteUserCallback}
                             isLoading={deleteLoading}
                           >
                             Delete
@@ -208,7 +208,7 @@ const UserDetailDrawer = ({
                       size='sm'
                       color='danger'
                       variant='light'
-                      onClick={resetBalanceCallBack}
+                      onClick={resetBalanceCallback}
                     >
                       Reset Balance
                     </Button>
