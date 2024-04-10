@@ -61,7 +61,7 @@ export const UpdateProductModal = ({
               setProduct={setClickedItem}
             />
             <ModalFooter>
-              <Button color='danger' variant='flat' onClick={onClose}>
+              <Button color='danger' variant='light' onClick={onClose}>
                 Close
               </Button>
               <Button

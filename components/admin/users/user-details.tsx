@@ -110,13 +110,11 @@ const UserDetailDrawer = ({
             <Spinner />
           ) : (
             <>
-              <DrawerHeader>
+              <DrawerHeader className='flex flex-col gap-4'>
                 <div className='flex items-center justify-between w-full mt-2'>
                   <p>User Details</p>
                   <p className='text-sm text-gray-500'>{user.balance} 💰</p>
                 </div>
-              </DrawerHeader>
-              <DrawerBody>
                 <Card
                   // User info card
                   className='p-4 gap-4 w-full bg-secondary-100'
@@ -146,6 +144,8 @@ const UserDetailDrawer = ({
                     </Chip>
                   </div>
                 </Card>
+              </DrawerHeader>
+              <DrawerBody>
                 <div className='mt-4'>
                   <Slider
                     size='md'

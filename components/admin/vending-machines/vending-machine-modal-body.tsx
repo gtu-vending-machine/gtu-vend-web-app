@@ -1,15 +1,5 @@
-import { PlusIcon } from '@/components/icons';
-import {
-  CreateVendingMachinePayload,
-  VendingMachineListItem,
-} from '@/types/vending-machines';
-import {
-  Avatar,
-  Button,
-  Input,
-  ModalBody,
-  VisuallyHidden,
-} from '@nextui-org/react';
+import { CreateVendingMachinePayload } from '@/types/vending-machines';
+import { Input, ModalBody } from '@nextui-org/react';
 import React, { Dispatch, SetStateAction } from 'react';
 
 export const VendingMachineModalBody = ({
@@ -23,7 +13,7 @@ export const VendingMachineModalBody = ({
     <ModalBody className='gap-4'>
       <Input
         label='Name'
-        placeholder='Product name'
+        placeholder='Vending Machine name'
         variant='flat'
         value={vendingMachine.name}
         onChange={(e) =>

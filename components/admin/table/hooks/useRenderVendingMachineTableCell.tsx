@@ -24,27 +24,12 @@ import toast from 'react-hot-toast';
 import { VendingMachineListItem } from '@/types/vending-machines';
 
 const useRenderVendingMachineTableCell = ({
-  setData,
-  setClickedItem,
-  onOpen,
+  setClickedItemId,
+  setIsOpen,
 }: {
-  setData: Dispatch<SetStateAction<VendingMachineListItem[]>>;
-  setClickedItem: Dispatch<SetStateAction<Partial<VendingMachineListItem>>>;
-  onOpen: () => void;
+  setClickedItemId: Dispatch<SetStateAction<number>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
-  // const { deleteVendingMachine } = useContext(AdminApiContext);
-
-  // const handleDeleteVendingMachine = async (id: number) => {
-  //   await deleteVendingMachine(id).then((res) => {
-  //     if (res) {
-  //       setData((prev) =>
-  //         prev.filter((vendingMachine) => vendingMachine.id !== id),
-  //       );
-  //       toast.success('VendingMachine deleted successfully');
-  //     }
-  //   });
-  // };
-
   const renderVendingMachineCell = useCallback(
     (vendingMachine: VendingMachineListItem, columnKey: Key) => {
       const cellValue =
@@ -53,18 +38,19 @@ const useRenderVendingMachineTableCell = ({
       switch (columnKey as Column<VendingMachineListItem>['uid']) {
         case 'name':
           return (
-            <User
-              // just an avatar, not user
-              avatarProps={{
-                radius: 'lg',
-                size: 'lg',
-                name: vendingMachine.name,
-              }}
-              description={vendingMachine.name}
-              name={vendingMachine.name}
-            >
-              {vendingMachine.name}
-            </User>
+            // <User
+            //   // just an avatar, not user
+            //   avatarProps={{
+            //     radius: 'lg',
+            //     size: 'lg',
+            //     name: vendingMachine.name,
+            //   }}
+            //   description={vendingMachine.name}
+            //   name={vendingMachine.name}
+            // >
+            //   {vendingMachine.name}
+            // </User>
+            <div className='flex items-center gap-2'>{vendingMachine.name}</div>
           );
         case '_slotCount':
           return (
@@ -88,43 +74,18 @@ const useRenderVendingMachineTableCell = ({
 
         case 'actions':
           return (
-            <div className='relative flex justify-start items-center w-full gap-4'>
-              <span
-                className='text-lg text-default-400 cursor-pointer active:opacity-50'
+            <div className='relative flex justify-start items-center gap-2'>
+              <Button
+                size='sm'
+                variant='light'
                 onClick={() => {
-                  onOpen();
-                  setClickedItem(vendingMachine);
+                  setClickedItemId(vendingMachine.id);
+                  setIsOpen(true);
                 }}
+                color='primary'
               >
-                <EditIcon />
-              </span>
-              <Popover>
-                <PopoverTrigger>
-                  <span className='text-lg text-danger cursor-pointer active:opacity-50'>
-                    <DeleteIcon />
-                  </span>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <div className='p-2'>
-                    <div className='text-small'>
-                      Are you sure you want to delete this vendingMachine?
-                    </div>
-                    <div className='flex items-center mt-4 gap-2'>
-                      <Button
-                        size='sm'
-                        variant='flat'
-                        color='danger'
-                        onClick={() =>
-                          // handleDeleteVendingMachine(vendingMachine.id)
-                          console.log('delete')
-                        }
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
+                View
+              </Button>
             </div>
           );
         default:

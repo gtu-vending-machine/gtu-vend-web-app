@@ -1,5 +1,4 @@
 import { AdminApiContext } from '@/context/admin-api-provider';
-import { CreateProductPayload } from '@/types/product';
 import {
   Button,
   Modal,
@@ -22,7 +21,6 @@ export const AddVendingMachine = ({
   setData: Dispatch<SetStateAction<VendingMachineListItem[]>>;
 }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  ``;
   const { createVendingMachine } = useContext(AdminApiContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,7 +29,6 @@ export const AddVendingMachine = ({
       name: '',
       slotCount: 0,
     });
-
   const handleAddVendingMachine = async () => {
     setIsLoading(true);
     await createVendingMachine(vendingMachine as CreateVendingMachinePayload)
@@ -66,7 +63,7 @@ export const AddVendingMachine = ({
                   setVendingMachine={setVendingMachine}
                 />
                 <ModalFooter>
-                  <Button color='danger' variant='flat' onClick={onClose}>
+                  <Button color='danger' variant='light' onClick={onClose}>
                     Close
                   </Button>
                   <Button

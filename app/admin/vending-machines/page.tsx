@@ -36,8 +36,6 @@ const VendingMachinePage: NextPage = () => {
     fetchVendingMachines(query);
   }, [query]);
 
-  console.log(vendingmachines, 'vendingmachines');
-
   return (
     <>
       <VendingMachineTable
