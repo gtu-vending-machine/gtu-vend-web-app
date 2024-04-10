@@ -15,8 +15,9 @@ import {
 } from '@nextui-org/react';
 import { useContext, useEffect, useState } from 'react';
 import { HasVendingMachine, NoVendingMachine } from './vending-machine-list';
+import { VendingMachineLayout } from '../layouts/vending-machines-layout';
 
-const PAGE_SIZE = 8;
+export const PAGE_SIZE = 6;
 
 export const Content = () => {
   const { getVendingMachinesWithQuery } = useContext(AdminApiContext);
@@ -48,73 +49,70 @@ export const Content = () => {
   console.log(vendingmachines);
 
   return (
-    <div className='flex flex-col items-center justify-center gap-4 py-8'>
-      <div className='max-w-xl w-full gap-4 flex flex-col'>
-        <Input
-          placeholder='Search a vending machine...'
-          variant='underlined'
-          startContent={<SearchIcon color='gray' />}
-          value={(query.query?.filter?.[0]?.value as string) || ''}
-          onChange={(e) =>
-            setQuery({
-              query: {
-                pagination: { page: 1, pageSize: PAGE_SIZE },
-                filter: [
-                  {
-                    field: 'name',
-                    option: 'contains',
-                    value: e.target.value,
-                  },
-                ],
-              },
-            })
-          }
-        />
-        <div className='flex flex-col justify-center items-center gap-5'>
-          <Card shadow='none' className='border border-gray-200 w-full'>
-            <CardHeader>Vending Machines</CardHeader>
-            <CardBody>
-              {loading ? (
-                <div className='flex justify-center items-center  mt-20'>
-                  <Spinner />
-                </div>
-              ) : (
-                <>
-                  <HasVendingMachine
-                    vendingmachines={vendingmachines}
-                    page={query.query.pagination?.page as number}
-                  />
-                  <NoVendingMachine vendingmachines={vendingmachines} />
-                </>
-              )}
-            </CardBody>
-            <CardFooter className='flex flex-col gap-4'>
-              <div className='flex w-full mt-4'>
-                <p className='text-xs text-gray-400 text-center'>
-                  Total {count} vending machines.
-                </p>
+    <VendingMachineLayout>
+      <Input
+        placeholder='Search a vending machine...'
+        startContent={<SearchIcon color='gray' />}
+        value={(query.query?.filter?.[0]?.value as string) || ''}
+        onChange={(e) =>
+          setQuery({
+            query: {
+              pagination: { page: 1, pageSize: PAGE_SIZE },
+              filter: [
+                {
+                  field: 'name',
+                  option: 'contains',
+                  value: e.target.value,
+                },
+              ],
+            },
+          })
+        }
+      />
+      <div className='flex flex-col justify-center items-center gap-5'>
+        <Card shadow='none' className='border border-gray-200 w-full'>
+          <CardHeader>Vending Machines</CardHeader>
+          <CardBody>
+            {loading ? (
+              <div className='flex justify-center items-center  mt-20'>
+                <Spinner />
               </div>
-              {count > 0 && (
-                <div>
-                  <Pagination
-                    onChange={(page) =>
-                      setQuery({
-                        query: {
-                          ...query.query,
-                          pagination: { page, pageSize: PAGE_SIZE },
-                        },
-                      })
-                    }
-                    showControls
-                    initialPage={1}
-                    total={Math.ceil(count / PAGE_SIZE)}
-                  />
-                </div>
-              )}
-            </CardFooter>
-          </Card>
-        </div>
+            ) : (
+              <>
+                <HasVendingMachine
+                  vendingmachines={vendingmachines}
+                  page={query.query.pagination?.page as number}
+                />
+                <NoVendingMachine vendingmachines={vendingmachines} />
+              </>
+            )}
+          </CardBody>
+          <CardFooter className='flex flex-col gap-4'>
+            <div className='flex w-full mt-4'>
+              <p className='text-xs text-gray-400 text-center'>
+                Total {count} vending machines.
+              </p>
+            </div>
+            {count > 0 && (
+              <div>
+                <Pagination
+                  onChange={(page) =>
+                    setQuery({
+                      query: {
+                        ...query.query,
+                        pagination: { page, pageSize: PAGE_SIZE },
+                      },
+                    })
+                  }
+                  showControls
+                  initialPage={1}
+                  total={Math.ceil(count / PAGE_SIZE)}
+                />
+              </div>
+            )}
+          </CardFooter>
+        </Card>
       </div>
-    </div>
+    </VendingMachineLayout>
   );
 };
