@@ -27,8 +27,12 @@ const BuyButton = ({ slot }: { slot: SlotDetail }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleTransactionConfirmation = async (transaction: Transaction) => {
+    let confirmationResult:
+      | Pick<Transaction, 'hasConfirmed' | 'id'>
+      | undefined = undefined;
+
     const confirmationInterval = setInterval(async () => {
-      const confirmationResult = await confirmTransaction({
+      confirmationResult = await confirmTransaction({
         code: transaction.code,
       });
       if (confirmationResult?.hasConfirmed) {
@@ -40,11 +44,13 @@ const BuyButton = ({ slot }: { slot: SlotDetail }) => {
 
     // Timeout for failed confirmation
     setTimeout(() => {
-      clearInterval(confirmationInterval);
-      toast.error('Transaction is not confirmed');
-      setIsOpen(false);
-      cancelTransaction(transaction.id);
-    }, 10000);
+      if (!confirmationResult?.hasConfirmed) {
+        clearInterval(confirmationInterval);
+        toast.error('Transaction is not confirmed');
+        setIsOpen(false);
+        cancelTransaction(transaction.id);
+      }
+    }, 100100);
   };
 
   // callback function to create transaction
