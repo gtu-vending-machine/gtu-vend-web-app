@@ -19,8 +19,8 @@ const HasVendingMachine = ({
 }: {
   vendingmachines: VendingMachineListItem[];
   page: number;
-}) => {
-  if (vendingmachines.length === 0) return;
+}): JSX.Element => {
+  if (vendingmachines.length === 0) return <></>;
 
   return (
     <div className='w-full grid sm:grid-cols-3 gap-4 mt-4 grid-cols-2'>
@@ -76,8 +76,12 @@ const HasVendingMachine = ({
   );
 };
 
-const NoVendingMachine = ({ vendingmachines }: { vendingmachines: any[] }) => {
-  if (vendingmachines.length > 0) return;
+const NoVendingMachine = ({
+  vendingmachines,
+}: {
+  vendingmachines: any[];
+}): JSX.Element => {
+  if (vendingmachines.length > 0) return <></>;
   return (
     <div className='flex justify-center items-center w-full mt-20'>
       <h1>No vending machines found</h1>
