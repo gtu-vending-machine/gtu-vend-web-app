@@ -6,8 +6,8 @@ import { Column, OptionType, Query } from '@/types';
 import { UserListItem } from '@/types/user';
 
 import useRenderUserTableCell from '../table/hooks/useRenderUserTableCell';
-import UserDetailDrawer from './user-details';
 import TableOutline from '../table/table-outline';
+import UserDetailDrawer from './user-details';
 
 const searchOption: OptionType = { uid: 'name', name: 'name' };
 // supports only two options for now

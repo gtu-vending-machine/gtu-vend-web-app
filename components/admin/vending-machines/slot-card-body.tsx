@@ -75,7 +75,7 @@ const EmptySlot = ({
   onOpen: () => void;
 }): React.ReactNode | React.ReactNode[] => {
   if (slot.product) {
-    return null;
+    return <></>;
   }
   return (
     <>
