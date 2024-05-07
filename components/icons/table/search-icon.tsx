@@ -1,4 +1,4 @@
-import { IconSvgProps } from '@/types/types';
+import { IconSvgProps } from '@/types';
 import React from 'react';
 
 export const SearchIcon = (props: IconSvgProps) => (
