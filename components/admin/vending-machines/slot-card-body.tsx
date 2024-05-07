@@ -73,9 +73,9 @@ const EmptySlot = ({
   setSelectedSlot: React.Dispatch<React.SetStateAction<Slot | undefined>>;
   slot: Slot;
   onOpen: () => void;
-}): React.ReactNode | React.ReactNode[] => {
+}): JSX.Element => {
   if (slot.product) {
-    return null;
+    return <></>;
   }
   return (
     <>
