@@ -1,8 +1,8 @@
 import { Content } from '@/components/admin/home';
 import type { NextPage } from 'next';
 
-const Home: NextPage = () => {
+const AdminPage: NextPage = () => {
   return <Content />;
 };
 
-export default Home;
+export default AdminPage;

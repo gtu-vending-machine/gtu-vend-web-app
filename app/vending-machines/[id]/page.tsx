@@ -8,17 +8,18 @@ import { Card, CardFooter, CardHeader, Input } from '@nextui-org/react';
 import { SearchIcon } from '@/components/icons';
 import { VendingMachineLayout } from '@/components/layouts/vending-machines-layout';
 import { ApiContext } from '@/context/api-provider';
-import { AuthContext } from '@/context/auth-provider';
 import Slots from '@/components/vending-machines.ts/slots';
+import { User } from '@/types/user';
 
 // vending machine details page
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
   const { id } = params;
-  const { user } = useContext(AuthContext);
   const { getSlotsByVendingMachineAndProductName } = useContext(ApiContext);
   const [search, setSearch] = useState('');
   const [slots, setSlots] = useState<SlotDetail[] | undefined>(undefined);
+  const { getMe } = useContext(ApiContext);
+  const [user, setUser] = useState<User>();
 
   const getSlotsByVendingMachineAndProductNameCallback =
     useCallback(async () => {
@@ -38,6 +39,10 @@ export default function Page({ params }: { params: { id: string } }) {
 
     getSlotsByVendingMachineAndProductNameCallback();
   }, [id, search]);
+
+  useEffect(() => {
+    getMe().then((data) => setUser(data));
+  }, []);
 
   return slots ? (
     <VendingMachineLayout>

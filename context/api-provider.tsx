@@ -5,6 +5,7 @@ import { User } from '@/types/user';
 import { SlotDetail } from '@/types/vending-machines';
 import axios from 'axios';
 import { createContext, useMemo } from 'react';
+import toast from 'react-hot-toast';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -42,7 +43,10 @@ export const getSlotsByVendingMachineAndProductName = async ({
       return response.data;
     })
     .catch((error) => {
-      console.error('Failed to get slots by vending machine and product name');
+      toast.error(
+        error.response?.data.message ||
+          'Failed to get slots by vending machine',
+      );
       return;
     });
 };
@@ -64,7 +68,9 @@ export const createTransaction = async ({
       return response.data;
     })
     .catch((error) => {
-      console.error(error);
+      toast.error(
+        error.response?.data.message || 'Failed to create transaction',
+      );
       return;
     });
 };
@@ -82,7 +88,9 @@ export const confirmTransaction = async ({
       return response.data;
     })
     .catch((error) => {
-      console.error(error);
+      toast.error(
+        error.response?.data.message || 'Failed to confirm transaction',
+      );
       return;
     });
 };
@@ -95,7 +103,43 @@ export const cancelTransaction = async (id: number): Promise<Transaction> => {
       return response.data;
     })
     .catch((error) => {
-      console.error(error);
+      toast.error(
+        error.response?.data.message || 'Failed to cancel transaction',
+      );
+    });
+};
+
+export const approveTransaction = async ({
+  code,
+}: {
+  code: string;
+}): Promise<Pick<Transaction, 'hasConfirmed' | 'id'> | undefined> => {
+  return axiosInstance
+    .put('/transactions/approve', {
+      code,
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      toast.error(
+        error.response?.data.message || 'Failed to approve transaction',
+      );
+      return;
+    });
+};
+
+// me route
+// /me
+export const getMe = async (): Promise<User | undefined> => {
+  return axiosInstance
+    .get('/me')
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      toast.error(error.response?.data.message || 'Failed to get user');
+      return;
     });
 };
 
@@ -104,6 +148,8 @@ export const ApiContext = createContext({
   createTransaction,
   confirmTransaction,
   cancelTransaction,
+  approveTransaction,
+  getMe,
 });
 
 export const AdminApiProvider = ({
@@ -117,6 +163,8 @@ export const AdminApiProvider = ({
       createTransaction,
       confirmTransaction,
       cancelTransaction,
+      approveTransaction,
+      getMe,
     }),
     [],
   );

@@ -42,4 +42,4 @@ export type Query = {
   };
 };
 
-export type Role = 'admin' | 'user' | 'vendingMachine';
+export type Role = 'admin' | 'user' | 'machine';

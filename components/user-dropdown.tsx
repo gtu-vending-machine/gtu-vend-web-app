@@ -6,12 +6,20 @@ import {
   DropdownTrigger,
   NavbarItem,
 } from '@nextui-org/react';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@/context/auth-provider';
 import { ThemeSwitch } from '@/components/theme-switch';
+import { ApiContext } from '@/context/api-provider';
+import { User } from '@/types/user';
 
 export const UserDropdown = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
+  const { getMe } = useContext(ApiContext);
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    getMe().then((data) => setUser(data));
+  }, []);
 
   return (
     <Dropdown placement='bottom-end'>

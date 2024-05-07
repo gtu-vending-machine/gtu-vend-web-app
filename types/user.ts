@@ -12,7 +12,8 @@ export type User = {
 
 export type UserResponse = Pick<
   User,
-  'id' | 'username' | 'role' | 'token' | 'balance'
+  // balance should be deleted from here
+  'id' | 'username' | 'role' | 'token'
 >;
 
 export type UserListItem = UserResponse & {

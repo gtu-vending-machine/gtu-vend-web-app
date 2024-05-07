@@ -13,20 +13,10 @@ import { siteConfig } from '@/config/site';
 import NextLink from 'next/link';
 import clsx from 'clsx';
 
-import { ThemeSwitch } from '@/components/theme-switch';
 import { GithubIcon } from '@/components/icons';
 
 import { Logo } from '@/components/icons';
-import {
-  Avatar,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-  Link,
-} from '@nextui-org/react';
-import { useContext } from 'react';
-import { AuthContext } from '@/context/auth-provider';
+import { Link } from '@nextui-org/react';
 import { UserDropdown } from './user-dropdown';
 
 export const Navbar = () => {
