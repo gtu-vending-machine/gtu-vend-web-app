@@ -18,8 +18,12 @@ import { GithubIcon } from '@/components/icons';
 import { Logo } from '@/components/icons';
 import { Link } from '@nextui-org/react';
 import { UserDropdown } from './user-dropdown';
+import { useContext } from 'react';
+import { AuthContext } from '@/context/auth-provider';
 
 export const Navbar = () => {
+  const { user } = useContext(AuthContext);
+
   return (
     <NextUINavbar maxWidth='xl' position='sticky'>
       <NavbarContent className='basis-1/5 sm:basis-full' justify='start'>
@@ -43,6 +47,22 @@ export const Navbar = () => {
               </NextLink>
             </NavbarItem>
           ))}
+          {user?.role === 'admin' && (
+            <>
+              <NavbarItem>
+                <NextLink
+                  className={clsx(
+                    linkStyles({ color: 'foreground' }),
+                    'data-[active=true]:text-primary data-[active=true]:font-medium',
+                  )}
+                  color='foreground'
+                  href='/admin'
+                >
+                  Admin Dashboard
+                </NextLink>
+              </NavbarItem>
+            </>
+          )}
         </ul>
       </NavbarContent>
 
