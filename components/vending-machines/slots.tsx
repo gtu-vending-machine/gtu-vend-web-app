@@ -12,8 +12,16 @@ import {
 } from '@nextui-org/react';
 import { NotExist } from '@/components/icons';
 import BuyButton from './buy-button';
+import { User } from '@/types/user';
+import { Dispatch, SetStateAction } from 'react';
 
-const Slots = ({ slots }: { slots: SlotDetail[] }) => {
+const Slots = ({
+  slots,
+  setUser,
+}: {
+  slots: SlotDetail[];
+  setUser: Dispatch<SetStateAction<User | undefined>>;
+}) => {
   return (
     <CardBody>
       <div className='w-full grid sm:grid-cols-3 gap-4 grid-cols-2'>
@@ -68,7 +76,7 @@ const Slots = ({ slots }: { slots: SlotDetail[] }) => {
                 )}
               </CardBody>
               <CardFooter className='flex items-center justify-center w-full p-2 mt-4 pb-2'>
-                <BuyButton slot={slot} />
+                <BuyButton slot={slot} setUser={setUser} />
               </CardFooter>
             </Card>
           );

@@ -152,11 +152,7 @@ export const ApiContext = createContext({
   getMe,
 });
 
-export const AdminApiProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const ApiProvider = ({ children }: { children: React.ReactNode }) => {
   const contextValue = useMemo(
     () => ({
       getSlotsByVendingMachineAndProductName,

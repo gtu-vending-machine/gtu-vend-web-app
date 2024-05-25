@@ -46,8 +46,6 @@ export const Content = () => {
     fetchVendingMachines(query);
   }, [query]);
 
-  console.log(vendingmachines);
-
   return (
     <VendingMachineLayout>
       <Input

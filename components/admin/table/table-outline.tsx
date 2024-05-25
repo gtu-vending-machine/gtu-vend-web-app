@@ -24,7 +24,6 @@ import useBottomContent from './hooks/useBottomContent';
 import useFilterCallbacks from './hooks/useFilterCallbacks';
 import usePageCallbacks from './hooks/usePageCallBacks';
 
-// export default function UserTable({
 export default function TableOutline<T extends { id: number; name: string }>({
   count,
   columns,

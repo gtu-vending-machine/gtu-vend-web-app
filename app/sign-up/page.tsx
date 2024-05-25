@@ -8,7 +8,7 @@ import { Button, Card, Input, Link } from '@nextui-org/react';
 import { useContext, useState } from 'react';
 
 export default function SignUpPage() {
-  const { user, signUp } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
 
   // password visibility
   const [isVisible, setIsVisible] = useState(false);

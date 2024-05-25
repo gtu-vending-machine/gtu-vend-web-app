@@ -17,15 +17,14 @@ export const UserDropdown = () => {
   const { getMe } = useContext(ApiContext);
   const [user, setUser] = useState<User>();
 
-  useEffect(() => {
-    getMe().then((data) => setUser(data));
-  }, []);
-
   return (
     <Dropdown placement='bottom-end'>
       <NavbarItem>
         <DropdownTrigger>
           <Avatar
+            onClick={() => {
+              getMe().then((data) => setUser(data));
+            }}
             as='button'
             color='secondary'
             size='sm'

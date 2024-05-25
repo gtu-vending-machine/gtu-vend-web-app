@@ -1,7 +1,13 @@
 'use client';
 
 import { SlotDetail } from '@/types/vending-machines';
-import { useCallback, useContext, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import {
   Button,
   Modal,
@@ -16,8 +22,15 @@ import { ApiContext } from '@/context/api-provider';
 import { AuthContext } from '@/context/auth-provider';
 import { Transaction } from '@/types/transactions';
 import toast from 'react-hot-toast';
+import { User } from '@/types/user';
 
-const BuyButton = ({ slot }: { slot: SlotDetail }) => {
+const BuyButton = ({
+  slot,
+  setUser,
+}: {
+  slot: SlotDetail;
+  setUser: Dispatch<SetStateAction<User | undefined>>;
+}) => {
   const { createTransaction, confirmTransaction, cancelTransaction } =
     useContext(ApiContext);
   const { user } = useContext(AuthContext);
@@ -35,9 +48,22 @@ const BuyButton = ({ slot }: { slot: SlotDetail }) => {
       confirmationResult = await confirmTransaction({
         code: transaction.code,
       });
+
       if (confirmationResult?.hasConfirmed) {
         clearInterval(confirmationInterval);
         toast.success('Transaction is confirmed');
+        setUser((prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            balance: (prev?.balance ?? 0) - (slot?.product?.price ?? 0),
+          };
+        });
+        setIsOpen(false);
+      } else if (confirmationResult === undefined) {
+        // if confirmation result is undifined, clear interval and cancel transaction
+        clearInterval(confirmationInterval);
+        toast.error('Transaction is canceled');
         setIsOpen(false);
       }
     }, 5000);
@@ -71,6 +97,13 @@ const BuyButton = ({ slot }: { slot: SlotDetail }) => {
     createTransactionCallback();
   };
 
+  const onCancel = () => {
+    setIsOpen(false);
+    if (transaction) {
+      cancelTransaction(transaction.id);
+    }
+  };
+
   return (
     <>
       <Button
@@ -83,7 +116,7 @@ const BuyButton = ({ slot }: { slot: SlotDetail }) => {
       >
         Buy
       </Button>
-      <Modal isOpen={isOpen} placement='top-center'>
+      <Modal isOpen={isOpen} placement='top-center' onClose={onCancel}>
         <ModalContent>
           <ModalHeader>Enter the code to the machine!</ModalHeader>
           {transaction ? (

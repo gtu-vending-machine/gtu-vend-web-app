@@ -8,7 +8,7 @@ import { Card, CardFooter, CardHeader, Input } from '@nextui-org/react';
 import { SearchIcon } from '@/components/icons';
 import { VendingMachineLayout } from '@/components/layouts/vending-machines-layout';
 import { ApiContext } from '@/context/api-provider';
-import Slots from '@/components/vending-machines.ts/slots';
+import Slots from '@/components/vending-machines/slots';
 import { User } from '@/types/user';
 
 // vending machine details page
@@ -59,7 +59,7 @@ export default function Page({ params }: { params: { id: string } }) {
             <p className='text-sm text-warning-500'>{user?.balance},00 🪙</p>
           </CardHeader>
           {/* content */}
-          <Slots slots={slots} />
+          <Slots slots={slots} setUser={setUser} />
           <CardFooter>
             <div className='flex w-full mt-4'>
               <p className='text-xs text-gray-400 text-center'>
