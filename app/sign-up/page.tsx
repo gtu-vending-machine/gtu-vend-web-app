@@ -9,6 +9,7 @@ import { useContext, useState } from 'react';
 
 export default function SignUpPage() {
   const { signUp } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   // password visibility
   const [isVisible, setIsVisible] = useState(false);
@@ -76,10 +77,16 @@ export default function SignUpPage() {
             </Link>
           </div>
           <Button
-            onClick={() => signUp(userCridentials)}
+            onClick={() => {
+              setLoading(true);
+              signUp(userCridentials).then(() => {
+                setLoading(false);
+              });
+            }}
             // primary
             type='submit'
             color='primary'
+            isLoading={loading}
           >
             Sign
           </Button>
