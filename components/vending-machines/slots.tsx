@@ -35,7 +35,7 @@ const Slots = ({
               shadow='sm'
             >
               <CardHeader className='flex flex-col  gap-4 w-full'>
-                <p>{slot.index}</p>
+                <p>{slot.index + 1}</p>
                 <Divider />
               </CardHeader>
               <CardBody className='pb-0 flex w-full items-center justify-center'>
