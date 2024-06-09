@@ -12,7 +12,7 @@ const VMTestPage: NextPage = () => {
 
   const handleApprove = async () => {
     if (!code) return;
-    const data = await approveTransaction({ code });
+    const data = await approveTransaction({ code, vendingMachineId: 1 });
     if (data) {
       toast.success('Transaction approved!');
     }

@@ -111,12 +111,15 @@ export const cancelTransaction = async (id: number): Promise<Transaction> => {
 
 export const approveTransaction = async ({
   code,
+  vendingMachineId,
 }: {
   code: string;
+  vendingMachineId: number;
 }): Promise<Pick<Transaction, 'hasConfirmed' | 'id'> | undefined> => {
   return axiosInstance
     .put('/transactions/approve', {
-      code,
+      code: code,
+      vendingMachineId: vendingMachineId,
     })
     .then((response) => {
       return response.data;
